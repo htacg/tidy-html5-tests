@@ -1,0 +1,9 @@
+case-445557: When tested on different OS these are the results prior to 5.1.33:
+
+OS               Markup   Errors   Exit Status
+--------------   ------   ------   -----------
+Mac OS X 10.11   fail     pass     pass
+Ubunutu 14.04    pass     pass     pass
+Windows 10       pass     pass     pass
+
+Mac OS X output was corrected in Tidy version 5.1.33.
