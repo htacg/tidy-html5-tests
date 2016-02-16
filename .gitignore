@@ -1,0 +1,12 @@
+.DS_Store
+*.user
+*.suo
+*.sdf
+testall.log
+tmp/
+tmp2/
+*~
+temp*
+*.bak
+*.old
+.idea
