@@ -15,18 +15,17 @@ if [ ! -z "$1" ]; then
     export TY_TIDY_PATH="$1"
 fi
 
+# Change our set name for this test.
+original_set="$TY_CASES_SETNAME"
+export TY_CASES_SETNAME="xml"
+
 # setup the ENVIRONMENT
 source "_environment.sh"
 set_environment
 
 # check critical inputs
-test_results_dir || exit 1
+test_results_base_dir || exit 1
 test_tidy_path || exit 1
-
-
-# Override the built-in cases for this test.
-original_cases_dir="${TY_CASES_DIR}"
-TY_CASES_DIR="${TY_CASES_BASE_DIR}/cases-xml"
 
 
 VERSION='$Id'
@@ -36,11 +35,12 @@ BUGS="427837 431956 433604 433607 433670 434100\
 while read bugNo expected
 do
 #  echo Testing $bugNo | tee -a testxml.log
-  ./testone.sh "$bugNo" "$expected" "$@" | tee -a "${TY_LOG_FILE}"
-  if test -f "${TY_RESULTS}/case-${bugNo}-result.html"
+  ./testone.sh "$bugNo" "$expected" "$@" | tee -a "${TY_RESULTS_FILE}"
+  if test -f "${TY_RESULTS_DIR}/case-${bugNo}.html"
   then
-    mv "${TY_RESULTS}/case-${bugNo}-result.html" "${TY_RESULTS}/case-${bugNo}-result.xml"
+    mv "${TY_RESULTS_DIR}/case-${bugNo}.html" "${TY_RESULTS_DIR}/case-${bugNo}.xml"
   fi
-done < "${TY_CASES_BASE_DIR}/expects-xmlcases.txt"
+done < "${TY_EXPECTS_FILE}"
 
-TY_CASES_DIR="${original_cases_dir}"
+# Restore the original set name
+export TY_CASES_SETNAME="$original_set"
