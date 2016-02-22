@@ -1,62 +1,130 @@
-# test directory 20151205
+Tidy Regression Testing Specification
+=====================================
 
-All of the test input files, some with their own config file, are in the `input` directory. These tests can be run using the various cmd/bat and sh script files supplied. 
+General
+-------
+This directory contains test cases and tools for executing them in order to
+perform Tidy output regression testing.
 
-And there is a `testbase` directory containing the expected output of all tests.
+All cases can be found in subdirectories of `cases/`.
 
-#### Files: alltest.cmd / testall.sh
+Testing tools can be found in the `tools-*` directories, and contain general
+language and platform-specific tools that can perform testing in accordance with
+this specification.
 
-In essence it is an attempt to automate some regression testing. The idea is that after making a code change to tidy, the alltest.cmd can be run using the new executable. This would produce an output in the `temp-5` folder.
-
-Comparing the `testbase` folder with the new `temp-5` folder will show you what file output was changed by your code modification, if any. In WIN32 there should be none.
-
-If unix the `$ diff -ua testbase tmp` will normally yield 3 changes, tests 431895, 500236 and 616606. 431895 is because it uses the `gnu-emacs: yes` option and we can thus expect the path separator in the file names to change.
-
-The other two 500236 and 616606 just seem to have some spaces changes. Not sure exactly why. If `-w` or `-b` option is use there should be no difference. So these 3 tests must be especially checked.
-
-Difficult, and tedious! Yes, but is a sure way to see if your changes adversely effected tidy. Unfortunately, only such a visual comparison would show the results. If the output changes are fully acceptable, like a warning message changed, then this should become the new base file for that test.
-
-Of course some of the tests were to say avoid a segfault found. Other tests were to visually compare the original input test file in a browser, with how the new output displayed in a browser. This is a purely VISUAL compare, and can not be done in code.
-
-And what about if there was NO current test existing to test what you were trying to fix. Well that means a NEW test should be added. Its output added to the 'base', then there would be a comparison.
-
-The chain is alltest.cmd runs alltest1.cmd, which then uses onetest.cmd for each test. And a similar chain for unix stating with testall.sh which uses testone.sh.
-
-Both tool chains use the testcases.txt file for the list of some 227 cases. There is now a `testinfo.txt` file which give some desciption of the test. Well actually the title of the original bug report filed at https://sourceforge.net/p/tidy/bugs/#number/
-
-Additionally there are some 27 xml tests, runby xmltest.cmd, reading the test list from xmlcases.txt, and using the same onetest.cmd for each test...
-
-#### Files: acctest.cmd / testaccess.sh
-
-Another series of tests in this folder are the accessability tests, executed by running the acctest.cmd.
-
-It uses onetesta.cmd to process each of the some 118 tests in accesscases.txt. 
-
-The test files for these accessability tests are in the `accessTest` directory.
-
-There is a similar unix tool chain of testaccess.sh, which uses testaccessone.sh for each test, from the same accesscases.txt list.
-
-#### Files: alltestc.bat
-
-This is essentially similar to the above, except it includes a COMPARE of the previous established output in the `testbase` folder with the NEW output in temp-5, hence the addition of a 'c'.
-
-As indicated above, this is an attempt to create such a BASE set of output files when tidy is run on the input test cases.
-
-Then when alltestc.bat is run, it runs alltest2.bat, which like the above it reads the tests from testcases.txt, and uses onetest2.bat for each test.
-
-So the difference between this and the above is, it further immediately compares the output of tidy, if there is one, with the equivalent file in the `testbase` directory using a windows port of diff.
-
-It is a success if there is **NO** diff! A difference means this newer version of tidy has modified the output. That modification needs to be carefully inspected, and if it is thought exact and suitable, then that new output should be copied to the `testbase` folder for future compares.
-
-#### Directory html5:
-
-A series of some 31 test html5 files were added for HTML5 support to this directory.
-
-In this folder there is a testhtml5.cmd, which uses testone.cmd to run each test. Similarly a testhtml5.sh for unix.
-
-Each of the *.org.html files will be process, with the output witten to a `tempout` directory.
-
-This was just to ensure tidy5 had support for many new tags introduced in HTML5.
+Each directory should have a README describing the contents of tools, test
+cases contained, etc.
 
 
-; eof
+Input Specification
+-------------------
+
+The test cases consist of the following:
+
+- Documents to tidy.
+- Optional configuration settings to be used for tidying.
+- Expected, tidied file.
+- Expected warning/error output.
+- A table of expected Tidy exit codes for each test.
+
+Each set of cases consists of directories and a text file within the `cases/`
+directory. Each test set shall consist of the following directories/files, where
+`setname` indicates the name of the testing set, e.g., `testbase` (our default
+set of case files).
+
+- `cases-setname/`, which contains the HTML files to tidy and optional
+  configuration file for each case.
+  - Test files shall have the format `case-nnn.html|xml|xhtml`, where `nnn`
+    represents the test case identification. The test case identification shall
+    not contain hyphens.
+  - Optional Tidy configuration files shall be named `case-nnn.conf`.
+  - In the absense of a configuration file, the file `config_default.conf` in
+    each directory will be used instead.
+
+- `cases-setname-expects/`, which contains the expected output from HTML Tidy.
+  - Files in the format `case-nnn.html` represent the expected HTML file as
+    generated by Tidy.
+  - Files in the format `case-nnn.txt` represent the expected warning/error
+    output from Tidy.
+
+- `cases-setname-expects.txt`, which consists of a table of test cases, expected
+  Tidy exist codes, and additional data (for some tests).
+  
+### Example
+
+~~~
+cases/
+   cases-testbase/
+      case-427821.html
+      case-427821.conf
+   cases-testbase-expects/
+      case-427821.html
+      case-427821.txt
+   cases-testbase-expects.txts
+~~~
+
+
+Output Specification
+--------------------
+
+The output specification is written such that it makes it trivial to easily
+`diff` a `cases-setname-expects` directory with the output of a test in order
+to check for differences.
+
+Test results consist of Tidy's HTML output, Tidy's warning/error output, and
+a test report. Testing tools may leave additional temporary files behind as
+well.
+
+Each set of results consists of directories within the `results/` directory.
+
+- `cases-setname-results` contains Tidy's HTML and warning/error output.
+  - Files in the format `case-nnn.html` are the HTML file generated by Tidy.
+  - Files in the format `case-nnn.txt` are the warning/error output from Tidy.
+
+- `cases-setname-results.txt` contains the test report generated by the testing
+  tools.
+
+### Example
+
+~~~
+results/
+   cases-testbase-results/
+      case-427821.html
+      case-427821.txt
+   cases-testbase-results.txt
+~~~
+
+
+Additional Notes and Comments
+-----------------------------
+
+In essence it is an attempt to automate some regression testing. The idea is
+that after making a code change to Tidy, testing can be run using the new Tidy
+executable. This would produce an output in the `results/` directory.
+
+For example, comparing `cases-testbase-expects/` with `cases-testbase-results`  
+will show you what file output was changed by your code modification, if any.
+In WIN32 there should be none.
+
+In Unix the `$ diff -ua cases-testbase-expects cases-testbase-results` will
+normally yield 3 changes: tests 431895, 500236 and 616606. 431895 is because it
+uses the `gnu-emacs: yes` option and we can thus expect the path separator in
+the file names to change.
+
+The other two 500236 and 616606 just seem to have some spaces changes. Not sure
+exactly why. If `-w` or `-b` option is use there should be no difference. So
+these 3 tests must be especially checked.
+
+Difficult, and tedious! Yes, but is a sure way to see if your changes adversely
+effected Tidy. Unfortunately, only such a visual comparison would show the
+results. If the output changes are fully acceptable, like a warning message
+changed, then this should become the new base file for that test.
+
+Of course some of the tests were to, say, avoid a segfault found. Other tests 
+were to visually compare the original input test file in a browser, with how the
+new output displayed in a browser. This is a purely VISUAL compare, and can not
+be done in code.
+
+And what about if there was NO current test existing to test what you were
+trying to fix. Well that means a NEW test should be added. Its output added to
+the base, then there would be a comparison.
