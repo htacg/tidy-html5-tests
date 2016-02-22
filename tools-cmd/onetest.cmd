@@ -91,7 +91,7 @@ goto done
 @goto TRYAT
 
 :TRYAT
-@echo Try running alltest1.cmd ..\build\cmake\Release\Tidy5.exe tmp
+@echo Try running alltest.cmd ..\build\cmake\Release\Tidy5.exe tmp
 @echo ==============================================================
 @pause
 @goto done

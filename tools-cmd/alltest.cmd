@@ -125,7 +125,7 @@ GOTO:EOF
 
 :USE
 @echo	Usage of ALLTEST.CMD
-@echo	AllTest1 [tidy.exe [Out_Folder]]
+@echo	AllTest [tidy.exe [Out_Folder]]
 @echo	tidy.exe - This is the Tidy.exe you want to use for the test.
 @echo	Out_Folder  - This is the FOLDER where you want the results put,
 @echo   relative to the %TY_RESULTS_BASE_DIR% folder.
