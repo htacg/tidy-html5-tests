@@ -9,31 +9,32 @@
 # <URL:http://www.html-tidy.org/>
 #=================================================================
 
+# Change our set name for this test.
+original_set="$TY_CASES_SETNAME"
+export TY_CASES_SETNAME="access"
+
 # setup the ENVIRONMENT
 source "_environment.sh"
 set_environment
 
 # check critical inputs
-test_results_dir || exit 1
+test_results_base_dir || exit 1
 test_tidy_path || exit 1
 
 
-# Override the built-in cases for this test.
-original_cases_dir="${TY_CASES_DIR}"
-TY_CASES_DIR="${TY_CASES_BASE_DIR}/cases-access"
-
 VERSION='$Id'
 
-if [ -f "${TY_LOG_FILE}" ]; then
-    rm "${TY_LOG_FILE}"
+if [ -f "${TY_RESULTS_FILE}" ]; then
+    rm "${TY_RESULTS_FILE}"
 fi
 
-cat "${TY_CASES_BASE_DIR}/expects-accesscases.txt" | sed 1d | \
+cat "${TY_EXPECTS_FILE}" | sed 1d | \
 {
 while read bugNo expected
 do
-    ./testaccessone.sh $bugNo $expected "$@" | tee -a "${TY_LOG_FILE}"
+    ./testaccessone.sh $bugNo $expected "$@" | tee -a "${TY_RESULTS_FILE}"
 done
 }
 
-TY_CASES_DIR="${original_cases_dir}"
+# Restore the original set name
+export TY_CASES_SETNAME="$original_set"

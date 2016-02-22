@@ -20,7 +20,7 @@ source "_environment.sh"
 set_environment
 
 # check critical inputs
-test_results_dir || exit 1
+test_results_base_dir || exit 1
 test_tidy_path || exit 1
 
 VERSION='$Id'
@@ -33,11 +33,11 @@ TESTNO=$1
 TESTEXPECTED=$2
 ACCESSLEVEL=$3
 
-INFILES="${TY_CASES_BASE_DIR}/cases-access/case-access_$1.*ml"
-CFGFILE="${TY_CASES_BASE_DIR}/cases-access/case-access_$1.conf"
+INFILES="${TY_CASES_DIR}/case-$1.*ml"
+CFGFILE="${TY_CASES_DIR}/case-$1.conf"
 
-TIDYFILE="${TY_RESULTS_DIR}/case-$1-result.html"
-MSGFILE="${TY_RESULTS_DIR}/case-$1-result.txt"
+TIDYFILE="${TY_RESULTS_DIR}/case-$1.html"
+MSGFILE="${TY_RESULTS_DIR}/case-$1.txt"
 
 unset HTML_TIDY
 
@@ -66,6 +66,11 @@ done
 if [ ! -f $CFGFILE ]
 then
   CFGFILE="${TY_CONFIG_DEFAULT}"
+fi
+
+# Make sure output directories exist.
+if [ ! -d "${TY_RESULTS_DIR}" ]; then
+  mkdir -p "${TY_RESULTS_DIR}"
 fi
 
 # Perform the testing
