@@ -23,8 +23,10 @@ set EXPECTED=%2
 set INFILES==%TY_CASES_DIR%\case-%1.*ml
 set CFGFILE=%TY_CASES_DIR%\case-%1.conf
 
-set TIDYFILE=%TIDYOUT%\case-%1-result.html
-set MSGFILE=%TIDYOUT%\case-%1-result.txt
+set TIDYFILE=%TY_RESULTS_DIR%\case-%1.html
+set MSGFILE=%TY_RESULTS_DIR%\case-%1.txt
+
+IF NOT EXIST %TY_RESULTS_DIR% mkdir %TY_RESULTS_DIR%
 
 set HTML_TIDY=
 

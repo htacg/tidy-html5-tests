@@ -63,6 +63,9 @@ rem ###########################################################################
     set TY_TMP_DIR=
     set TY_TMP_FILE=
     
+    # TY_TIDY_PATH
+    # TY_CASES_SETNAME
+    
 GOTO:EOF
 
 

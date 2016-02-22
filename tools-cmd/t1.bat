@@ -24,12 +24,13 @@
 
 @REM setup the ENVIRONMENT. Do this before any setlocal!
 @call _environment.bat :set_environment
+
 @setlocal
 
 @set TIDY=%TY_TIDY_PATH%
 
-@set TIDYOUT=%TY_RESULTS_DIR%
-@set TMPTEST=%TY_LOG_FILE%
+@set TIDYOUT=%TY_RESULTS_BASE_DIR%
+@set TMPTEST=%TY_RESULTS_FILE%
 
 @if NOT EXIST %TIDYOUT%\nul goto NOOUT
 @if NOT DEFINED TIDY goto SET_TY_TIDY_PATH
@@ -41,10 +42,10 @@
 
 @set TMPFIL=%TY_CASES_DIR%\case-%1.xhtml
 @if NOT EXIST %TMPFIL% (
-@set TMPFIL==%TY_CASES_DIR%\case-%1.xml
+@set TMPFIL=%TY_CASES_DIR%\case-%1.xml
 )
 @if NOT EXIST %TMPFIL% (
-@set TMPFIL==%TY_CASES_DIR%\case-%1.html
+@set TMPFIL=%TY_CASES_DIR%\case-%1.html
 )
 @set TMPCFG=%TY_CASES_DIR%\case-%1.conf
 @if NOT EXIST %TMPCFG% (
@@ -67,10 +68,10 @@
 
 @echo See ouput in %TMPTEST%
 
-@set TMPFIL1=%TY_CASES_DIR%\case-%1-expect.html
-@set TMPOUT1=%TY_CASES_DIR%\case-%1-expect.txt
-@set TMPFIL2=%TIDYOUT%\case-%1-result.html
-@set TMPOUT2=%TIDYOUT%\case-%1-result.txt
+@set TMPFIL1=%TY_EXPECTS_DIR%\case-%1.html
+@set TMPOUT1=%TY_EXPECTS_DIR%\case-%1.txt
+@set TMPFIL2=%TY_RESULTS_DIR%\case-%1.html
+@set TMPOUT2=%TY_RESULTS_DIR%\case-%1.txt
 
 @if NOT EXIST %TMPFIL1% goto NOFIL1
 @if NOT EXIST %TMPFIL2% goto NOFIL1
