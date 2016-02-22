@@ -2,7 +2,7 @@
 
 #### Files: alltest.cmd
 
-The chain is `alltest.cmd` runs `alltest1.cmd`, which then uses `onetest.cmd` for each test.
+The chain is `alltest.cmd` uses `onetest.cmd` for each test.
 
 This tool chain uses the `cases-testbase-expects.txt` file for the list of all of the test cases.
 

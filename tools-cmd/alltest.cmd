@@ -1,39 +1,148 @@
+@echo off
+REM #======================================================================
+REM # alltest.cmd
+REM #   Execute all test cases, optionally specifying a tidy instance.
+REM # 
+REM # (c) 1998-2006 (W3C) MIT, ERCIM, Keio University
+REM # See tidy.c for the copyright notice.
+REM # 
+REM # <URL:http://www.html-tidy.org/>
+REM # 
+REM #    $Author: arnaud02 $
+REM #    $Date: 2006/12/28 10:01:44 $
+REM #    $Revision: 1.1 $
+REM #======================================================================
+
+
+@REM setup the ENVIRONMENT. Do this before any setlocal!
+@call _environment.bat :set_environment
+
+@REM Allow user to specify a different Tidy. Do this before any setlocal!
+@IF NOT "%~1" == "" (
+    echo Setting TY_TIDY_PATH to "%~1"
+    set TY_TIDY_PATH=%~1
+)
+
 @setlocal
 
-@REM alltest.cmd - execute all test cases
-@REM It runs 'alltest1.cmd', which uses 'onetest.cmd'
-@REM
-@REM (c) 1998-2015 (W3C) MIT, ERCIM, Keio University
-@REM See include/tidy.h for the copyright notice.
-@REM
-@REM <URL:http://www.html-tidy.org/>
-@REM
+set TMPTEST=%TY_RESULTS_FILE%
 
-@REM ########################################################
-@REM ### *** SET LOCATION OF TIDY EXE TO USE FOR TEST *** ###
-@REM ###           (for MS compiler users)                ###
-@REM ########################################################
-@REM call alltest1 ..\build\msvc\Release\tidy.exe .\tmp
-@REM call alltest1 ..\bin\tidy.exe .\tmp
-@REM ########################################################################
-@REM This is the location of the cmake build output using the MSVC Generator
-@set TMPEXE=..\build\cmake\Release\tidy.exe
-@REM === some other test EXE I can use for compare ===
-@REM set TMPEXE=C:\Projects\tidy\tidy-cvs\build\msvc\Release\tidy.exe
-@REM set TMPEXE=C:\MDOS\tidydev.exe
-@REM ########################################################################
-@if NOT EXIST %TMPEXE% goto NOEXE
+@if "%1" == "/help" goto USE
+@if "%1" == "/h" goto USE
 
-@REM Set an output file - used in alltest1.cmd and onetest.cmd
-@set TMPTEST=temptest.txt
-@if EXIST %TMPTEST% @del %TMPTEST%
 
-@call alltest1 %TMPEXE% temp-5
+REM check for input file
+@if NOT EXIST %TY_EXPECTS_FILE% goto Err0
+@if NOT EXIST onetest.cmd goto Err3
+@if NOT EXIST %TY_CASES_DIR%\nul goto Err4
 
+REM set the runtime exe file
+@if NOT DEFINED TY_TIDY_PATH goto ERR5
+set TIDY=%TY_TIDY_PATH%
+@if NOT EXIST %TIDY% goto ERR1
+
+REM set the OUTPUT folder (will move later, if necessary)
+set TIDYOUT=%TY_RESULTS_DIR%
+set FINALOUT=%TY_RESULTS_DIR%
+
+REM Allow user to specify a different output directory.
+@IF NOT "%~2" == "" (
+    echo Will move final output to "%~2"
+    set FINALOUT=%~2
+)
+
+REM Create output directory if necessary.
+@if EXIST %TIDYOUT%\nul goto GOTDIR
+@md %TIDYOUT%
+@if NOT EXIST %TIDYOUT%\nul goto Err2
+:GOTDIR
+
+@set TMPCNT=0
+@for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do @set /A TMPCNT+=1
+@echo =============================== > %TMPTEST%
+@echo Date %DATE% %TIME% >> %TMPTEST%
+@echo Tidy EXE %TIDY%, version >> %TMPTEST%
+@%TIDY% -v >> %TMPTEST%
+@echo Input list of %TMPCNT% tests from '%TY_EXPECTS_FILE%' file >> %TMPTEST%
+@echo Outut will be to the '%FINALOUT%' folder >> %TMPTEST%
+@echo =============================== >> %TMPTEST%
+
+@echo Doing %TMPCNT% tests from '%TY_EXPECTS_FILE%' file...
+@set ERRTESTS=
+
+@for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do @call onetest.cmd %%i %%j
+@echo =============================== >> %TMPTEST%
+@if "%ERRTESTS%." == "." goto DONE
+@echo ERROR TESTS [%ERRTESTS%] ...
+@echo ERROR TESTS [%ERRTESTS%] ... >> %TMPTEST%
+:DONE
+@echo End %DATE% %TIME% >> %TMPTEST%
+@echo =============================== >> %TMPTEST%
+@IF NOT "%TIDYOUT%" == "%FINALOUT%" (
+    IF EXIST %TY_RESULTS_BASE_DIR%\%FINALOUT% goto WARNING1
+    IF EXIST %TY_RESULTS_BASE_DIR%\%FINALOUT%.txt WARNING1
+    echo Setting %TIDYOUT% to desired %FINALOUT%...
+    RENAME %TIDYOUT% %FINALOUT%
+    RENAME %TMPTEST% %FINALOUT%.txt
+    set TMPTEST=%TY_RESULTS_BASE_DIR%\%FINALOUT%.txt
+    )
+@echo.
+@echo See %TMPTEST% file for list of tests done...
+@echo And compare folders 'diff -u testbase %FINALOUT% ^> temp.diff'
+@echo and check any differences carefully... If acceptable update 'testbase' accordingly...
+@echo.
+goto END
+
+:ERR0
+echo	ERROR: Can not locate 'testcases.txt' ... check name, and location ...
+goto END
+
+:ERR1
+echo	ERROR: Can not locate %TIDY% ... check name, and location ...
+goto END
+
+:ERR2
+echo	ERROR: Can not create %TIDYOUT% folder ... check name, and location ...
+goto END
+
+:ERR3
+echo	ERROR: Can not locate 'onetest.cmd' ... check name, and location ...
+goto END
+
+:ERR4
+echo	ERROR: Can not locate 'input' folder ... check name, and location ...
+goto END
+
+:ERR5
+echo	ERROR: You must define TY_TIDY_PATH, or specify the path as an argument ...
+goto END
+
+:WARNING1
+echo	WARNING: You specified a directory name that already exists, so output
+echo	will be in %TY_RESULTS_DIR% and %TY_RESULTS_FILE%.
+GOTO:EOF
+
+
+:USE
+@echo	Usage of ALLTEST.CMD
+@echo	AllTest1 [tidy.exe [Out_Folder]]
+@echo	tidy.exe - This is the Tidy.exe you want to use for the test.
+@echo	Out_Folder  - This is the FOLDER where you want the results put,
+@echo   relative to the %TY_RESULTS_BASE_DIR% folder.
+@echo	This folder will be created if it does not already exist.
+@echo	These are both option, but you must specify [tidy.exe] if you
+@echo	wish to specify [Out_Folder].
+@echo	==================================
+@echo	ALLTEST.CMD will run a battery of test files in the input folder
+@echo	Each test name, has an expected result, given in its table.
+@echo	There will be a warning if any test file fails to give this result.
+@echo	==================================
+@echo	But the main purpose is to compare the 'results' of two version of
+@echo	any two Tidy runtime exe's. Thus after you have two sets of results,
+@echo	in separate folders, the idea is to compare these two folders.
+@echo	Any directory compare utility will do, or you can download, and use
+@echo	a WIN32 port of GNU diff.exe from http://unxutils.sourceforge.net/
+@echo	................................................................
 @goto END
 
-:NOEXE
-@echo.
-@echo Error: Can NOT locate %TMPEXE%! Has it been built?
-@echo *** FIX ME *** setting the location of the EXE to use for the test
 :END

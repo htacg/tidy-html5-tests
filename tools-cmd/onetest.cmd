@@ -46,7 +46,6 @@ if exist %TIDYFILE% del %TIDYFILE%
 @REM Noisy output, or quiet
 @REM echo Testing %1 input %INFILE% config %CFGFILE% ...
 @echo Doing: '%TIDY% -f %MSGFILE% -config %CFGFILE% %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o %TIDYFILE% %INFILE% >> %TMPTEST%
-@echo Doing: '%TIDY% -f %MSGFILE% -config %CFGFILE% %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o %TIDYFILE% %INFILE%
 
 @%TIDY% -f %MSGFILE% -config %CFGFILE% %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o %TIDYFILE% %INFILE%
 @set STATUS=%ERRORLEVEL%
