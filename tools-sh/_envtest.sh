@@ -10,7 +10,7 @@ report_testbase_version
 
 test_tidy_path
 
-test_results_dir
+test_results_base_dir
 
 version=$(report_tidy_version)
 
