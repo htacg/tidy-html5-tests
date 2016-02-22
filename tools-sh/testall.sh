@@ -20,12 +20,12 @@ source "_environment.sh"
 set_environment
 
 # check critical inputs
-test_results_dir || exit 1
+test_results_base_dir || exit 1
 test_tidy_path || exit 1
 
 
 TMPNOW=`d_now`
-TMPINP="${TY_EXPECTS_TESTBASE}"
+TMPINP="${TY_EXPECTS_FILE}"
 
 test_file_general "testone.sh" || exit 1
 test_file_general "$TMPINP" || exit 1
@@ -39,30 +39,30 @@ do
 done < $TMPINP
 
 # output a header
-if [ -f "${TY_LOG_FILE}" ]; then
-	rm -f ${TY_LOG_FILE}
+if [ -f "${TY_RESULTS_FILE}" ]; then
+	rm -f ${TY_RESULTS_FILE}
 fi
 echo "$BN: Will process $TMPCNT tests from $TMPINP on $TMPNOW"
-echo "$BN: Will process $TMPCNT tests from $TMPINP on $TMPNOW" > "${TY_LOG_FILE}"
-echo "$BN: Tidy version in use..." >> "${TY_LOG_FILE}"
+echo "$BN: Will process $TMPCNT tests from $TMPINP on $TMPNOW" > "${TY_RESULTS_FILE}"
+echo "$BN: Tidy version in use..." >> "${TY_RESULTS_FILE}"
 version=$(report_tidy_version) || exit 1
-echo ${version} >> "${TY_LOG_FILE}"
+echo ${version} >> "${TY_RESULTS_FILE}"
 version=$(report_testbase_version)
-echo ${version} >> "${TY_LOG_FILE}"
+echo ${version} >> "${TY_RESULTS_FILE}"
 
 
-echo "========================================" >> "${TY_LOG_FILE}"
+echo "========================================" >> "${TY_RESULTS_FILE}"
 # do the tests
 while read bugNo expected
 do
-#  echo Testing $bugNo | tee -a "${TY_LOG_FILE}"
-  ./testone.sh $bugNo $expected | tee -a "${TY_LOG_FILE}"
+#  echo Testing $bugNo | tee -a "${TY_RESULTS_FILE}"
+  ./testone.sh $bugNo $expected | tee -a "${TY_RESULTS_FILE}"
 done < $TMPINP
-echo "========================================" >> "${TY_LOG_FILE}"
+echo "========================================" >> "${TY_RESULTS_FILE}"
 
-echo "$BN: Done $TMPCNT tests..." >> "${TY_LOG_FILE}"
+echo "$BN: Done $TMPCNT tests..." >> "${TY_RESULTS_FILE}"
 echo "# eof"
-echo "$BN: Done $TMPCNT tests - see ${TY_LOG_FILE}"
+echo "$BN: Done $TMPCNT tests - see ${TY_RESULTS_FILE}"
 
 
 # eof
