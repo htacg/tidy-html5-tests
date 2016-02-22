@@ -4,7 +4,7 @@
 # A convenient run one test giving the number and expected exit
 # 
 # This is to run just one, like "./t1.sh 1642186-1 0"
-# By default default tidy will be used. To use another, specify
+# By default $TY_TIDY_PATH will be used. To use another, specify
 # the path to a different tidy as the third argument, e.g.,
 # "./t1.sh 1642186-1 0 path/to/tidy"
 # 
@@ -22,7 +22,7 @@ source "_environment.sh"
 set_environment
 
 # check critical inputs
-test_results_dir
+test_results_base_dir
 test_tidy_path
 
 if [ $ERROR_COUNT -gt 0 ]; then
@@ -45,7 +45,8 @@ give_help()
     echo "  the TY_TIDY_PATH environment variable in order to override."
     echo ""
     echo "Cases: ${TY_CASES_DIR}."
-    echo "  Set the TY_CASES_DIR environment variable in order to override."  
+    echo "Results: ${TY_RESULTS_DIR}."
+    echo "  Set the TY_CASES_SETNAME environment variable in order to override."  
     echo ""
 }
 
@@ -81,21 +82,21 @@ test_case_config "$TMPCFG"  || exit 1
 
 
 # Start logging.
-if [ -f "${TY_LOG_FILE}" ]; then
-    rm -f ${TY_LOG_FILE}
+if [ -f "${TY_RESULTS_FILE}" ]; then
+    rm -f ${TY_RESULTS_FILE}
 fi
-echo "$BN: Test 1 case $TMPCASE $TMPEXIT on $TMPNOW" > "${TY_LOG_FILE}"
-echo "$BN: Version of tidy in use..." >> "${TY_LOG_FILE}"
+echo "$BN: Test 1 case $TMPCASE $TMPEXIT on $TMPNOW" > "${TY_RESULTS_FILE}"
+echo "$BN: Version of tidy in use..." >> "${TY_RESULTS_FILE}"
 version=$(report_tidy_version) || exit 1
-echo ${version} >> "${TY_LOG_FILE}"
+echo ${version} >> "${TY_RESULTS_FILE}"
 version=$(report_testbase_version)
-echo ${version} >> "${TY_LOG_FILE}"
+echo ${version} >> "${TY_RESULTS_FILE}"
 
 
 echo ""
 echo "$BN: Doing './testone.sh $TMPCASE $TMPEXIT'"
-echo "$BN: Doing './testone.sh $TMPCASE $TMPEXIT'" >> "${TY_LOG_FILE}"
-echo "$BN: testone.sh run '${TY_TIDY_PATH} ... -config $TMPCFG $TMPFIL'" >> "${TY_LOG_FILE}"
+echo "$BN: Doing './testone.sh $TMPCASE $TMPEXIT'" >> "${TY_RESULTS_FILE}"
+echo "$BN: testone.sh run '${TY_TIDY_PATH} ... -config $TMPCFG $TMPFIL'" >> "${TY_RESULTS_FILE}"
 
 # Clear the temporary results file.
 if [ -f "${TY_TMP_FILE}" ]; then
@@ -107,24 +108,24 @@ fi
 
 # Append test results to the log.
 if [ -f "${TY_TMP_FILE}" ]; then
-    echo "==========================" >> "${TY_LOG_FILE}"
-    cat "${TY_TMP_FILE}" >> "${TY_LOG_FILE}"
-    echo "==========================" >> "${TY_LOG_FILE}"
+    echo "==========================" >> "${TY_RESULTS_FILE}"
+    cat "${TY_TMP_FILE}" >> "${TY_RESULTS_FILE}"
+    echo "==========================" >> "${TY_RESULTS_FILE}"
 else
-    echo "Why no ${TY_TMP_FILE} created???" >> "${TY_LOG_FILE}"
+    echo "Why no ${TY_TMP_FILE} created???" >> "${TY_RESULTS_FILE}"
 fi
 
 echo ""
-echo "$BN: See output in ${TY_LOG_FILE}"
+echo "$BN: See output in ${TY_RESULTS_FILE}"
 echo ""
 
 # Start the comparison phase
-echo "$BN: Checking for compare phase..." >> "${TY_LOG_FILE}"
+echo "$BN: Checking for compare phase..." >> "${TY_RESULTS_FILE}"
 
-TMPFIL1="${TY_CASES_DIR}/case-${TMPCASE}-expect.html"
-TMPOUT1="${TY_CASES_DIR}/case-${TMPCASE}-expect.txt"
-TMPFIL2="${TY_RESULTS_DIR}/case-${TMPCASE}-result.html"
-TMPOUT2="${TY_RESULTS_DIR}/case-${TMPCASE}-result.txt"
+TMPFIL1="${TY_EXPECTS_DIR}/case-${TMPCASE}.html"
+TMPOUT1="${TY_EXPECTS_DIR}/case-${TMPCASE}.txt"
+TMPFIL2="${TY_RESULTS_DIR}/case-${TMPCASE}.html"
+TMPOUT2="${TY_RESULTS_DIR}/case-${TMPCASE}.txt"
 
 test_file_expects $TMPFIL1 $TMPCASE
 test_file_expects $TMPOUT1 $TMPCASE
@@ -148,7 +149,7 @@ ERRCNT=0
 
 echo ""
 echo "$BN: Doing: 'diff $TMPOPTS $TMPFIL1 $TMPFIL2'"
-echo "$BN: Doing: 'diff $TMPOPTS $TMPFIL1 $TMPFIL2'" >> "${TY_LOG_FILE}"
+echo "$BN: Doing: 'diff $TMPOPTS $TMPFIL1 $TMPFIL2'" >> "${TY_RESULTS_FILE}"
 diff $TMPOPTS $TMPFIL1 $TMPFIL2
 if [ "$?" = "0" ]; then
     echo "Files appear exactly the same..."
@@ -159,7 +160,7 @@ fi
 
 echo ""
 echo "$BN: Doing: 'diff $TMPOPTS $TMPOUT1 $TMPOUT2'"
-echo "$BN: Doing: 'diff $TMPOPTS $TMPOUT1 $TMPOUT2'" >> "${TY_LOG_FILE}"
+echo "$BN: Doing: 'diff $TMPOPTS $TMPOUT1 $TMPOUT2'" >> "${TY_RESULTS_FILE}"
 diff $TMPOPTS $TMPOUT1 $TMPOUT2
 if [ "$?" = "0" ]; then
     echo "$BN: Files appear exactly the same..."
@@ -171,13 +172,13 @@ fi
 echo ""
 if [ "$ERRCNT" = "0" ]; then
     echo "$BN: Appears a successful test of $TMPCASE $TMPEXIT"
-    echo "$BN: Appears a successful test of $TMPCASE $TMPEXIT" >> "${TY_LOG_FILE}"
+    echo "$BN: Appears a successful test of $TMPCASE $TMPEXIT" >> "${TY_RESULTS_FILE}"
 else
     echo "$BN: Carefully REVIEW the above differences on $TMPCASE $TMPEXIT! *** ACTION REQUIRED ***"
-    echo "$BN: Carefully REVIEW the above differences on $TMPCASE $TMPEXIT! *** ACTION REQUIRED ***" >> "${TY_LOG_FILE}"
+    echo "$BN: Carefully REVIEW the above differences on $TMPCASE $TMPEXIT! *** ACTION REQUIRED ***" >> "${TY_RESULTS_FILE}"
 fi
 echo ""
-echo "# eof" >> "${TY_LOG_FILE}"
-echo "$BN: See full ouput in ${TY_LOG_FILE}"
+echo "# eof" >> "${TY_RESULTS_FILE}"
+echo "$BN: See full ouput in ${TY_RESULTS_FILE}"
 
 # eof

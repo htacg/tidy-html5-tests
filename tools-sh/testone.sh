@@ -23,7 +23,7 @@ source "_environment.sh"
 set_environment
 
 # check critical inputs
-test_results_dir || exit 1
+test_results_base_dir || exit 1
 test_tidy_path || exit 1
 
 echo Testing $1
@@ -35,8 +35,8 @@ EXPECTED=$2
 INFILES="${TY_CASES_DIR}/case-${TESTNO}.*ml"
 CFGFILE="${TY_CASES_DIR}/case-${TESTNO}.conf"
 
-TIDYFILE="${TY_RESULTS_DIR}/case-${TESTNO}-result.html"
-MSGFILE="${TY_RESULTS_DIR}/case-${TESTNO}-result.txt"
+TIDYFILE="${TY_RESULTS_DIR}/case-${TESTNO}.html"
+MSGFILE="${TY_RESULTS_DIR}/case-${TESTNO}.txt"
 
 # Remove any pre-exising test outputs
 for INFIL in $MSGFILE $TIDYFILE
@@ -61,9 +61,12 @@ then
   CFGFILE="${TY_CONFIG_DEFAULT}"
 fi
 
-# Make sure output directory exists.
+# Make sure output directories exist.
+if [ ! -d "${TY_RESULTS_DIR}" ]; then
+  mkdir -p "${TY_RESULTS_DIR}"
+fi
 if [ ! -d "${TY_TMP_DIR}" ]; then
-  mkdir "${TY_TMP_DIR}"
+  mkdir -p "${TY_TMP_DIR}"
 fi
 
 
