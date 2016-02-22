@@ -78,9 +78,9 @@ set_environment()
     
     export TY_PROJECT_ROOT_DIR="${project_root_dir}"
     export TY_CASES_BASE_DIR="${TY_PROJECT_ROOT_DIR}/${cases_base_dir}"
-    export TY_CASES_DIR="${TY_CASES_BASE_DIR}/cases-${cases_setname}"
-    export TY_EXPECTS_DIR="${TY_CASES_BASE_DIR}/cases-${cases_setname}-expects"
-    export TY_EXPECTS_FILE="${TY_CASES_BASE_DIR}/cases-${cases_setname}-expects.txt"
+    export TY_CASES_DIR="${TY_CASES_BASE_DIR}/cases-${TY_CASES_SETNAME}"
+    export TY_EXPECTS_DIR="${TY_CASES_BASE_DIR}/cases-${TY_CASES_SETNAME}-expects"
+    export TY_EXPECTS_FILE="${TY_CASES_BASE_DIR}/cases-${TY_CASES_SETNAME}-expects.txt"
     export TY_CONFIG_DEFAULT="${TY_CASES_DIR}/${config_default}"
     export TY_VERSION_FILE="${TY_CASES_BASE_DIR}/${version_file}"
     export TY_RESULTS_BASE_DIR="${TY_PROJECT_ROOT_DIR}/${results_base_dir}" 
