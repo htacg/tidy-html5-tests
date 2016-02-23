@@ -32,7 +32,7 @@ results_base_dir="cases"
 tmp_dir="tmp"
 
 # These are expected to be in cases_base_dir directory.
-version_file="version.txt"
+version_file="_version.txt"
 
 # This file must exist in any test cases directory.
 config_default="config_default.conf"
