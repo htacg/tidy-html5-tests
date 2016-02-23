@@ -29,13 +29,13 @@ rem ###########################################################################
 
     rem # These are all relative from the TY_PROJECT_ROOT_DIR directory.
     set TY_CASES_BASE_DIR=cases
-    set TY_RESULTS_BASE_DIR=results
+    set TY_RESULTS_BASE_DIR=cases
 
     rem # These are relative to the TY_CASES_BASE_DIR directory.
-    set TY_TMP_DIR=tmp
+    set TY_TMP_DIR=_tmp
 
     rem # These are expected to be in cases_base_dir directory.
-    set TY_VERSION_FILE=version.txt
+    set TY_VERSION_FILE=_version.txt
 
     rem # This file must exist in any test cases directory.
     set TY_CONFIG_DEFAULT=config_default.conf
@@ -86,14 +86,14 @@ rem ###########################################################################
 
     set TY_PROJECT_ROOT_DIR=%TY_PROJECT_ROOT_DIR%
     set TY_CASES_BASE_DIR=%TY_PROJECT_ROOT_DIR%\%TY_CASES_BASE_DIR%
-    set TY_CASES_DIR=%TY_CASES_BASE_DIR%\cases-%TY_CASES_SETNAME%
-    set TY_EXPECTS_DIR=%TY_CASES_BASE_DIR%\cases-%TY_CASES_SETNAME%-expects
-    set TY_EXPECTS_FILE=%TY_CASES_BASE_DIR%\cases-%TY_CASES_SETNAME%-expects.txt
+    set TY_CASES_DIR=%TY_CASES_BASE_DIR%\%TY_CASES_SETNAME%
+    set TY_EXPECTS_DIR=%TY_CASES_BASE_DIR%\%TY_CASES_SETNAME%-expects
+    set TY_EXPECTS_FILE=%TY_CASES_DIR%\_manifest.txt
     set TY_CONFIG_DEFAULT=%TY_CASES_DIR%\%TY_CONFIG_DEFAULT%
     set TY_VERSION_FILE=%TY_CASES_BASE_DIR%\%TY_VERSION_FILE%
     set TY_RESULTS_BASE_DIR=%TY_PROJECT_ROOT_DIR%\%TY_RESULTS_BASE_DIR%
-    set TY_RESULTS_DIR=%TY_RESULTS_BASE_DIR%\cases-%TY_CASES_SETNAME%-results
-    set TY_RESULTS_FILE=%TY_RESULTS_BASE_DIR%\cases-%TY_CASES_SETNAME%-results.txt
+    set TY_RESULTS_DIR=%TY_RESULTS_BASE_DIR%\%TY_CASES_SETNAME%-results
+    set TY_RESULTS_FILE=%TY_RESULTS_BASE_DIR%\%TY_CASES_SETNAME%-results.txt
     set TY_TMP_DIR=%TY_RESULTS_BASE_DIR%\%TY_TMP_DIR%
     set TY_TMP_FILE=%TY_TMP_DIR%\temp.txt
 
