@@ -11,3 +11,5 @@ temp*
 *.old
 .idea
 results
+cases/*-results
+cases/*-results.txt

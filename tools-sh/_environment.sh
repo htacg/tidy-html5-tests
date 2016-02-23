@@ -26,7 +26,7 @@ project_root_dir=".."
 
 # These are all relative from the project_root_dir directory.
 cases_base_dir="cases"
-results_base_dir="results"
+results_base_dir="cases"
 
 # These are relative to the results_base_dir directory.
 tmp_dir="tmp"
