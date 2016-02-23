@@ -50,10 +50,14 @@
 @REM this has to all one line ...
 @%TY_TIDY_PATH% -f %MSGFILE% --accessibility-check %ACCESSLEVEL% -config %CFGFILE% --gnu-emacs yes --tidy-mark no -o %TIDYFILE% %INFILE%
 
+
+REM Create temp directory if necessary.
+@if NOT EXIST %TY_TMP_DIR%\nul @md %TY_TMP_DIR%
+
 @REM output the FIND count to the a result file
-@find /c "%TESTEXPECTED%" %MSGFILE% > tempres.txt
+@find /c "%TESTEXPECTED%" %MSGFILE% > %TY_TMP_FILE%
 @REM load the find count, token 3, into variable RESULT
-@for /F "tokens=3" %%i in (tempres.txt) do @set RESULT=%%i
+@for /F "tokens=3" %%i in (%TY_TMP_FILE%) do @set RESULT=%%i
 @REM test the RESULT variable ...
 @if "%RESULT%." == "0." goto Err
 @if "%RESULT%." == "1." goto done
@@ -74,11 +78,11 @@
 @goto done
 
 :NOTEST
-@echo Error: NO test number given as the first argument!
+@echo Error: NO test number given as the first command!
 :NOEXPECT
-@echo Error: NO expected result given as the second argument!
+@echo Error: NO expected result given as the second command!
 :NOLEVEL
-@echo Error: NO accesslevel given as the third argument!
+@echo Error: NO accesslevel given as the thrid command!
 @goto HELP
 
 :NOLOG
