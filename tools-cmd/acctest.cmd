@@ -1,41 +1,30 @@
-@setlocal
 @REM echo off
+@REM #======================================================================
 @REM execute all test cases of the accessibility test suite
+@REM #======================================================================
 
-@REM USER VARIABLES
-@REM ##############
-@REM set executable to be used
-@set TIDY=..\build\cmake\Release\tidy.exe
-@REM set INPUT folder
-@set TIDYINPUT=accessTest
-@REM set OUTPUT folder
-@set TIDYOUT=temp-acc
-@REM set input test list file
-@set TIDYIN=accesscases.txt
-@set TIDYLOG=tempacc.txt
-@REM ##############
+@REM setup the ENVIRONMENT. Do this before any setlocal!
+set original_cases_setname=%TY_CASES_SETNAME%
+set TY_CASES_SETNAME=access
+@call _environment.bat :set_environment
+@setlocal
 
-@if NOT EXIST %TIDY% goto ERR1
-@if NOT EXIST %TIDYINPUT%\cfg_default.txt goto ERR2
-@if NOT EXIST %TIDYIN% goto ERR3
-@REM Make sure output directory exists, or WARN of creation ...
-@if EXIST %TIDYOUT%\nul goto RUNTEST
-@echo	NOTE: Folder %TIDYOUT% does not exist. It will be created ...
-@echo	Ctrl+C to abort ... any other keyin to continue ...
-@pause
-@md %TIDYOUT%
-:RUNTEST
+@if NOT EXIST %TY_TIDY_PATH% goto ERR1
+@if NOT EXIST %TY_CONFIG_DEFAULT% goto ERR2
+@if NOT EXIST %TY_EXPECTS_FILE% goto ERR3
+@if NOT EXIST %TY_RESULTS_DIR%\nul @md %TY_RESULTS_DIR%
+
 @echo Running ACCESS TEST suite
-@echo Executable = %TIDY%
-@echo Input Folder = %TIDYINPUT%
-@echo Output Folder = %TIDYOUT%
+@echo Executable = %TY_TIDY_PATH%
+@echo Input Folder = %TY_CASES_DIR%
+@echo Output Folder = %TY_RESULTS_DIR%
 
-@echo Running ACCESS TEST suite > %TIDYLOG%
-@echo Executable = %TIDY% >> %TIDYLOG%
-@echo Input Folder = %TIDYINPUT% >> %TIDYLOG%
-@echo Output Folder = %TIDYOUT% >> %TIDYLOG%
+@echo Running ACCESS TEST suite >%TY_RESULTS_FILE%
+@echo Executable = %TY_TIDY_PATH% >>%TY_RESULTS_FILE%
+@echo Input Folder = %TY_CASES_DIR% >>%TY_RESULTS_FILE%
+@echo Output Folder = %TY_RESULTS_DIR% >>%TY_RESULTS_FILE%
 @set FAILEDACC=
-@for /F "skip=1 tokens=1,2*" %%i in (%TIDYIN%) do @(call onetesta.cmd %%i %%j %%k)
+@for /F "skip=1 tokens=1,2*" %%i in (%TY_EXPECTS_FILE%) do @(call onetesta.cmd %%i %%j %%k)
 @if "%FAILEDACC%." == "." goto SUCCESS
 @echo FAILED [%FAILEDACC%] ...
 @goto END
@@ -46,16 +35,17 @@
 
 
 :ERR1
-@echo	ERROR: Unable to locate executable - [%TIDY%] - check name and location ...
+@echo	ERROR: Unable to locate executable - [%TY_TIDY_PATH%] - check name and location ...
 @goto END
 
 :ERR2
-@echo	ERROR: Unable to locate input folder - [%TIDYINPUT%]! - check name and location ...
-@echo	Specifically can not locate the file - [%TIDYINPUT%\cfg_default.txt] ...
+@echo	ERROR: Cannot locate file - [%TY_CONFIG_DEFAULT%] check name and location ...
 @goto END
 
 :ERR3
-@echo	ERROR: Can not locate file - [%TIDYIN%] - check name and location ...
+@echo	ERROR: Cannot locate file - [%TY_EXPECTS_FILE%] - check name and location ...
 @goto END
 
 :END
+
+set TY_CASES_SETNAME=%original_cases_setname%

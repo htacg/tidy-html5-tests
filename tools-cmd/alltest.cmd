@@ -1,7 +1,8 @@
 @echo off
 REM #======================================================================
 REM # alltest.cmd
-REM #   Execute all test cases, optionally specifying a tidy instance.
+REM #   Execute all test cases, optionally specifying a tidy instance
+REM #   and different output folder.
 REM # 
 REM # (c) 1998-2006 (W3C) MIT, ERCIM, Keio University
 REM # See tidy.c for the copyright notice.
