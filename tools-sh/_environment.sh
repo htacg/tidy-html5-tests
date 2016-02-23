@@ -29,7 +29,7 @@ cases_base_dir="cases"
 results_base_dir="cases"
 
 # These are relative to the results_base_dir directory.
-tmp_dir="tmp"
+tmp_dir="_tmp"
 
 # These are expected to be in cases_base_dir directory.
 version_file="_version.txt"
