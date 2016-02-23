@@ -48,4 +48,5 @@ set TY_CASES_SETNAME=access
 
 :END
 
+@endlocal
 set TY_CASES_SETNAME=%original_cases_setname%

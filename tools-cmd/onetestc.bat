@@ -1,34 +1,40 @@
-@setlocal
 @echo off
-@set TMPTEST=temptest.txt
-REM onetest2.bat - execute a single test case
-REM
+@REM #======================================================================
+@REM onetestc.bat - execute a single test case
+@REM #======================================================================
+
+
+@REM setup the ENVIRONMENT. Do this before any setlocal!
+@call _environment.bat :set_environment
+@setlocal
+
+@set TMPTEST=%TY_RESULTS_FILE%
 
 @if "%TIDY%." == "." goto Err1
 @if NOT EXIST %TIDY% goto Err2
 @if "%TIDYOUT%." == "." goto Err3
 @if NOT EXIST %TIDYOUT%\nul goto Err4
-@if NOT EXIST input\nul goto Err5
-@if NOT EXIST testbase\nul goto Err8
+@if NOT EXIST %TY_CASES_DIR%\nul goto Err5
+@if NOT EXIST %TY_EXPECTS_DIR%\nul goto Err8
 @if "%1x" == "x" goto Err9
 @if "%2x" == "x" goto Err10
 
 set TESTNO=%1
 set EXPECTED=%2
 
-set INFILES=input\in_%1.*ml
-set CFGFILE=input\cfg_%1.txt
+set INFILES=%TY_CASES_DIR%\case-%1.*ml
+set CFGFILE=%TY_CASES_DIR%\case-%1.conf
 
-set TIDYFILE=%TIDYOUT%\out_%1.html
-set MSGFILE=%TIDYOUT%\msg_%1.txt
+set TIDYFILE=%TIDYOUT%\case-%1.html
+set MSGFILE=%TIDYOUT%\case-%1.txt
 
 @rem Setup the BASE file
-@set TIDYBASE=testbase\out_%1.html
+@set TIDYBASE=%TY_EXPECTS_DIR%\case-%1.html
 
 set HTML_TIDY=
 
 REM If no test specific config file, use default.
-if NOT exist %CFGFILE% set CFGFILE=input\cfg_default.txt
+if NOT exist %CFGFILE% set CFGFILE=%TY_CONFIG_DEFAULT%
 
 REM Get specific input file name
 @set INFILE=
@@ -77,8 +83,8 @@ if exist %TIDYFILE% del %TIDYFILE%
 @echo Can NOT locate %TIDYBASE%. This may be ok if not file generated
 @goto done
 :NOOUT
-@echo *** FAILED: A base file exists, but none geneated this time!
-@echo *** FAILED: A base file exists, but none geneated this time! >> %TMPTEST%
+@echo *** FAILED: A base file exists, but none generated this time!
+@echo *** FAILED: A base file exists, but none generated this time! >> %TMPTEST%
 @goto done
 
 :Err1

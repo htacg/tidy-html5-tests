@@ -57,4 +57,5 @@ set TY_CASES_SETNAME=xml
 
 :END
 
+@endlocal
 set TY_CASES_SETNAME=%original_cases_setname%

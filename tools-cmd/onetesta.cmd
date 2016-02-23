@@ -22,7 +22,7 @@
 @if "%TY_RESULTS_FILE%x" == "x" goto NOLOG
 
 @set INFILES=%TY_CASES_DIR%\case-%1.*ml
-@set CFGFILE=%TY_CASES_DIR%\case-%1.txt
+@set CFGFILE=%TY_CASES_DIR%\case-%1.conf
 
 @set TIDYFILE=%TY_RESULTS_DIR%\case-%1.html
 @set MSGFILE=%TY_RESULTS_DIR%\case-%1.txt

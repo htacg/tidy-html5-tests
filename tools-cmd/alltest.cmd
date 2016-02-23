@@ -125,25 +125,25 @@ GOTO:EOF
 
 
 :USE
-@echo	Usage of ALLTEST.CMD
-@echo	AllTest [tidy.exe [Out_Folder]]
-@echo	tidy.exe - This is the Tidy.exe you want to use for the test.
-@echo	Out_Folder  - This is the FOLDER where you want the results put,
-@echo   relative to the %TY_RESULTS_BASE_DIR% folder.
-@echo	This folder will be created if it does not already exist.
-@echo	These are both option, but you must specify [tidy.exe] if you
-@echo	wish to specify [Out_Folder].
-@echo	==================================
-@echo	ALLTEST.CMD will run a battery of test files in the input folder
-@echo	Each test name, has an expected result, given in its table.
-@echo	There will be a warning if any test file fails to give this result.
-@echo	==================================
-@echo	But the main purpose is to compare the 'results' of two version of
-@echo	any two Tidy runtime exe's. Thus after you have two sets of results,
-@echo	in separate folders, the idea is to compare these two folders.
-@echo	Any directory compare utility will do, or you can download, and use
-@echo	a WIN32 port of GNU diff.exe from http://unxutils.sourceforge.net/
-@echo	................................................................
+@echo  Usage of ALLTEST.CMD
+@echo  AllTest [tidy.exe [Out_Folder]]
+@echo  tidy.exe - This is the Tidy.exe you want to use for the test.
+@echo  Out_Folder  - This is the FOLDER where you want the results put,
+@echo  relative to the %TY_RESULTS_BASE_DIR% folder.
+@echo  This folder will be created if it does not already exist.
+@echo  These are both optional, but you must specify [tidy.exe] if you
+@echo  wish to specify [Out_Folder].
+@echo  ==================================
+@echo  ALLTEST.CMD will run a battery of test files in the input folder
+@echo  Each test name, has an expected result, given in its table.
+@echo  There will be a warning if any test file fails to give this result.
+@echo  ==================================
+@echo  But the main purpose is to compare the 'results' of two version of
+@echo  any two Tidy runtime exe's. Thus after you have two sets of results,
+@echo  in separate folders, the idea is to compare these two folders.
+@echo  Any directory compare utility will do, or you can download, and use
+@echo  a WIN32 port of GNU diff.exe from http://unxutils.sourceforge.net/
+@echo  ................................................................
 @goto END
 
 :END
