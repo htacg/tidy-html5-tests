@@ -4,27 +4,24 @@ setlocal enabledelayedexpansion
 REM #======================================================================
 REM # A convenient run one test giving the number and expected exit
 REM #
-REM # This is to run just one, like "t1 1642186-1 0"
+REM # This is to run just one, like "t1 1642186-1 0 [tidy_path]"
 REM #
-REM # Note it uses a relative path to the built exe file, and
-REM # expects the ouput folder has to exist.
-REM #
-REM # Obviously you may want to adjust this file, like seen below to test
-REM # different versions of tidy.exe...
-REM # Rather than altering this file, which will be flagged by git,
-REM # I copy it to say a temp1.bat, and modify that to suit my testing
-REM #
-REM # There is also an 'alltest.bat' which runs some 227 tests that 
-REM # gets the case listed in 'testcases.txt' file.
+REM # Note that you must specify as the third argument a path to tidy,
+REM # or alternatively set the TY_TIDY_PATH environment variable. In
+REM # addition the output folder has to exist.
 REM #======================================================================
 
-REM # Allow user to specify a different Tidy.
+REM ------------------------------------------------
+REM  Allow user to specify a different Tidy.
+REM ------------------------------------------------
 IF NOT "%~3" == "" (
     echo Setting TY_TIDY_PATH to "%~3"
     set TY_TIDY_PATH="%~3"
 )
 
-REM setup the ENVIRONMENT.
+REM ------------------------------------------------
+REM  Setup the ENVIRONMENT.
+REM ------------------------------------------------
 call _environment.bat :set_environment
 
 set TIDY=%TY_TIDY_PATH%
@@ -36,7 +33,9 @@ if NOT EXIST %TIDYOUT%\nul goto NOOUT
 if NOT DEFINED TIDY goto SET_TY_TIDY_PATH
 if NOT EXIST %TIDY% goto NOEXE
 
-REM Check user input
+REM ------------------------------------------------
+REM  Check user input
+REM ------------------------------------------------
 if "%~1x" == "x" goto HELP
 if "%~2x" == "x" goto HELP
 
@@ -61,8 +60,8 @@ if ERRORLEVEL 1 goto NOTIDY
 
 %TIDY% -v
 echo.
-echo Doing '@call onetest.bat %1 %2'
-echo Doing '@call onetest.bat %1 %2' >> %TMPTEST%
+echo Doing 'call onetest.bat %1 %2'
+echo Doing 'call onetest.bat %1 %2' >> %TMPTEST%
 
 call onetest.bat %1 %2
 
@@ -79,30 +78,35 @@ if NOT EXIST %TMPFIL2% goto NOFIL1
 if NOT EXIST %TMPOUT1% goto NOFIL2
 if NOT EXIST %TMPOUT2% goto NOFIL2
 
+REM ------------------------------------------------
 REM Compare the outputs, exactly
+REM ------------------------------------------------
 set TMPOPTS=-ua
 set ERRCNT=0
 
 echo.
-echo Doing: '@diff %TMPOPTS% %TMPFIL1% %TMPFIL2%'
+echo Doing: 'diff %TMPOPTS% %TMPFIL1% %TMPFIL2%'
 diff %TMPOPTS% %TMPFIL1% %TMPFIL2%
 if ERRORLEVEL 1 goto GOTD1
 echo Files appear exactly the same...
 goto DODIF2
+
 :GOTD1
 call :ISDIFF
 set /A ERRCNT+=1
-:DODIF2
 
+:DODIF2
 echo.
-echo Doing: '@diff %TMPOPTS% %TMPOUT1% %TMPOUT2%'
+echo Doing: 'diff %TMPOPTS% %TMPOUT1% %TMPOUT2%'
 diff %TMPOPTS% %TMPOUT1% %TMPOUT2%
 if ERRORLEVEL 1 goto GOTD2
 echo Files appear exactly the same...
 goto DODIF3
+
 :GOTD2
 call :ISDIFF
 set /A ERRCNT+=1
+
 :DODIF3
 echo.
 if "%ERRCNT%x" == "0x" (
@@ -174,7 +178,6 @@ echo.
 echo Error: Can NOT locate %TMPCFG%!
 echo.
 goto END
-
 
 :HELP
 echo.
