@@ -7,7 +7,7 @@ line 20 column 9 - Warning: inserting implicit <strong>
 line 20 column 9 - Warning: missing </strong> before <h1>
 line 23 column 1 - Warning: inserting implicit <strong>
 line 25 column 96 - Warning: unescaped & or unknown entity "&body"
-line 23 column 1 - Warning: replacing unexpected font by </font>
+line 23 column 1 - Warning: replacing unexpected font with </font>
 line 66 column 104 - Warning: unescaped & or unknown entity "&city"
 line 66 column 5 - Warning: missing </strong> before <h2>
 line 66 column 1 - Warning: missing </h3> before <h2>
@@ -71,8 +71,6 @@ line 341 column 1 - Warning: <img> lacks "alt" attribute
 line 345 column 1 - Warning: <img> lacks "alt" attribute
 line 349 column 1 - Warning: <a> escaping malformed URI reference
 line 371 column 79 - Warning: <img> lacks "alt" attribute
-line 383 column 5 - Warning: <a> proprietary attribute "alt"
-line 399 column 7 - Warning: <input> proprietary attribute "border"
 line 414 column 1 - Warning: <img> lacks "alt" attribute
 line 14 column 9 - Warning: trimming empty <strong>
 line 296 column 120 - Warning: trimming empty <font>
@@ -96,8 +94,14 @@ line 163 column 1 - Warning: <a> cannot copy name attribute to id
 line 168 column 131 - Warning: <a> cannot copy name attribute to id
 line 200 column 176 - Warning: <a> cannot copy name attribute to id
 line 248 column 94 - Warning: <a> cannot copy name attribute to id
+line 341 column 1 - Warning: <img> attribute "align" not allowed for HTML5
+line 345 column 1 - Warning: <img> attribute "align" not allowed for HTML5
+line 390 column 5 - Warning: <td> attribute "align" not allowed for HTML5
+line 403 column 3 - Warning: <tr> attribute "align" not allowed for HTML5
+line 383 column 5 - Warning: <a> proprietary attribute "alt"
+line 399 column 7 - Warning: <input> proprietary attribute "border"
 Info: Document content looks like HTML5
-96 warnings, 0 errors were found!
+Tidy found 100 warnings and 0 errors!
 
 URIs must be properly escaped, they must not contain unescaped
 characters below U+0021 including the space character and not
@@ -105,7 +109,7 @@ above U+007E. Tidy escapes the URI for you as recommended by
 HTML 4.01 section B.2.1 and XML 1.0 section 4.2.2. Some user agents
 use another algorithm to escape such URIs and some server-sided
 scripts depend on that. If you want to depend on that, you must
-escape the URI by your own. For more information please refer to
+escape the URI on your own. For more information please refer to
 http://www.w3.org/International/O-URL-and-ident.html
 
 The alt attribute should be used to give a short description
@@ -122,7 +126,11 @@ compared with using <FONT> elements.
 
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues
-Or send questions and comments to: https://lists.w3.org/Archives/Public/public-htacg/
+Official mailing list: https://lists.w3.org/Archives/Public/public-htacg/
 Latest HTML specification: http://dev.w3.org/html5/spec-author-view/
 Validate your HTML documents: http://validator.w3.org/nu/
 Lobby your company to join the W3C: http://www.w3.org/Consortium
+
+Do you speak a language other than English, or a different variant of 
+English? Consider helping us to localize HTML Tidy. For details please see 
+https://github.com/htacg/tidy-html5/blob/master/README/LOCALIZE.md
