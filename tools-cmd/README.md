@@ -1,24 +1,24 @@
 # tools-cmd
 
-#### Files: alltest.cmd
+#### Files: alltest.bat
 
-The chain is `alltest.cmd` uses `onetest.cmd` for each test.
+The chain is `alltest.bat` uses `onetest.bat` for each test.
 
 This tool chain uses the default directory for the list of all of the test cases. The default is `testbase` unless you change the `TY_CASES_SETNAME` environment variable. The tests run are found in the directory's `_manifest.txt` file.
 
 There is now a `README/testinfo.txt` file which give some desciption of the tests. Well actually the title of the [original SF bug report](https://sourceforge.net/p/tidy/bugs/#number/).
 
 
-#### Files: xmltest.cmd
+#### Files: xmltest.bat
 
-Additionally there are some 27 xml tests, run using `xmltest.cmd`, reading the tests from `xml` and its `_manifest.txt` file. It uses the same `onetest.cmd` for each test.
+Additionally there are some 27 xml tests, run using `xmltest.bat`, reading the tests from `xml` and its `_manifest.txt` file. It uses the same `onetest.bat` for each test.
 
 
-#### Files: acctest.cmd
+#### Files: acctest.bat
 
-Another series of tests in this folder are the accessability tests, executed by running the `acctest.cmd.`
+Another series of tests in this folder are the accessability tests, executed by running the `acctest.bat.`
 
-It uses `onetesta.cmd` to process each of the some 118 tests in `access` using its `_manifest.txt` file. 
+It uses `onetesta.bat` to process each of the some 118 tests in `access` using its `_manifest.txt` file. 
 
 The test files for these accessability tests are in the `cases-access` directory.
 

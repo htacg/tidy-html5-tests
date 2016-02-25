@@ -24,26 +24,26 @@ set TY_CASES_SETNAME=access
 @echo Input Folder = %TY_CASES_DIR% >>%TY_RESULTS_FILE%
 @echo Output Folder = %TY_RESULTS_DIR% >>%TY_RESULTS_FILE%
 @set FAILEDACC=
-@for /F "skip=1 tokens=1,2*" %%i in (%TY_EXPECTS_FILE%) do @(call onetesta.cmd %%i %%j %%k)
+@for /F "skip=1 tokens=1,2*" %%i in (%TY_EXPECTS_FILE%) do @(call onetesta.bat %%i %%j %%k)
 @if "%FAILEDACC%." == "." goto SUCCESS
 @echo FAILED [%FAILEDACC%] ...
 @goto END
 
 :SUCCESS
-@echo	Appears ALL tests ran fine ...
+@echo   Appears ALL tests ran fine ...
 @goto END
 
 
 :ERR1
-@echo	ERROR: Unable to locate executable - [%TY_TIDY_PATH%] - check name and location ...
+@echo   ERROR: Unable to locate executable - [%TY_TIDY_PATH%] - check name and location ...
 @goto END
 
 :ERR2
-@echo	ERROR: Cannot locate file - [%TY_CONFIG_DEFAULT%] check name and location ...
+@echo   ERROR: Cannot locate file - [%TY_CONFIG_DEFAULT%] check name and location ...
 @goto END
 
 :ERR3
-@echo	ERROR: Cannot locate file - [%TY_EXPECTS_FILE%] - check name and location ...
+@echo   ERROR: Cannot locate file - [%TY_EXPECTS_FILE%] - check name and location ...
 @goto END
 
 :END

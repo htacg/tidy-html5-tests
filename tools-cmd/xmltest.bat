@@ -1,7 +1,7 @@
 @echo off
 
 @REM =================================================================
-@REM xmltest.cmd - execute all XML test cases
+@REM xmltest.bat - execute all XML test cases
 @REM
 @REM (c) 1998-2003 (W3C) MIT, ERCIM, Keio University
 @REM See tidy.c for the copyright notice.
@@ -35,7 +35,7 @@ set TY_CASES_SETNAME=xml
 @if EXIST %TMPTEST% @del %TMPTEST%
 @echo Commencing xml tests from %TY_EXPECTS_FILE%
 
-@for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do @(call onetest.cmd %%i %%j)
+@for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do @(call onetest.bat %%i %%j)
 
 @echo Full output written to %TMPTEST%
 

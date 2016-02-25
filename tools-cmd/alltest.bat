@@ -1,6 +1,6 @@
 @echo off
 REM #======================================================================
-REM # alltest.cmd
+REM # alltest.bat
 REM #   Execute all test cases, optionally specifying a tidy instance
 REM #   and different output folder.
 REM # 
@@ -34,7 +34,7 @@ set TMPTEST=%TY_RESULTS_FILE%
 
 REM check for input file
 @if NOT EXIST %TY_EXPECTS_FILE% goto Err0
-@if NOT EXIST onetest.cmd goto Err3
+@if NOT EXIST onetest.bat goto Err3
 @if NOT EXIST %TY_CASES_DIR%\nul goto Err4
 
 REM set the runtime exe file
@@ -71,7 +71,7 @@ REM Create output directory if necessary.
 @echo Doing %TMPCNT% tests from '%TY_EXPECTS_FILE%' file...
 @set ERRTESTS=
 
-@for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do @call onetest.cmd %%i %%j
+@for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do @call onetest.bat %%i %%j
 @echo =============================== >> %TMPTEST%
 @if "%ERRTESTS%." == "." goto DONE
 @echo ERROR TESTS [%ERRTESTS%] ...
@@ -95,37 +95,37 @@ REM Create output directory if necessary.
 goto END
 
 :ERR0
-echo	ERROR: Can not locate 'testcases.txt' ... check name, and location ...
+echo    ERROR: Can not locate 'testcases.txt' ... check name, and location ...
 goto END
 
 :ERR1
-echo	ERROR: Can not locate %TIDY% ... check name, and location ...
+echo    ERROR: Can not locate %TIDY% ... check name, and location ...
 goto END
 
 :ERR2
-echo	ERROR: Can not create %TIDYOUT% folder ... check name, and location ...
+echo    ERROR: Can not create %TIDYOUT% folder ... check name, and location ...
 goto END
 
 :ERR3
-echo	ERROR: Can not locate 'onetest.cmd' ... check name, and location ...
+echo    ERROR: Can not locate 'onetest.bat' ... check name, and location ...
 goto END
 
 :ERR4
-echo	ERROR: Can not locate 'input' folder ... check name, and location ...
+echo    ERROR: Can not locate 'input' folder ... check name, and location ...
 goto END
 
 :ERR5
-echo	ERROR: You must define TY_TIDY_PATH, or specify the path as an argument ...
+echo    ERROR: You must define TY_TIDY_PATH, or specify the path as an argument ...
 goto END
 
 :WARNING1
-echo	WARNING: You specified a directory name that already exists, so output
-echo	will be in %TY_RESULTS_DIR% and %TY_RESULTS_FILE%.
+echo    WARNING: You specified a directory name that already exists, so output
+echo    will be in %TY_RESULTS_DIR% and %TY_RESULTS_FILE%.
 GOTO:EOF
 
 
 :USE
-@echo  Usage of ALLTEST.CMD
+@echo  Usage of ALLTEST.BAT
 @echo  AllTest [tidy.exe [Out_Folder]]
 @echo  tidy.exe - This is the Tidy.exe you want to use for the test.
 @echo  Out_Folder  - This is the FOLDER where you want the results put,
@@ -134,7 +134,7 @@ GOTO:EOF
 @echo  These are both optional, but you must specify [tidy.exe] if you
 @echo  wish to specify [Out_Folder].
 @echo  ==================================
-@echo  ALLTEST.CMD will run a battery of test files in the input folder
+@echo  ALLTEST.BAT will run a battery of test files in the input folder
 @echo  Each test name, has an expected result, given in its table.
 @echo  There will be a warning if any test file fails to give this result.
 @echo  ==================================

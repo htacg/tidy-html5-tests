@@ -118,7 +118,7 @@ if exist %TIDYFILE% del %TIDYFILE%
 @goto TRYAT
 
 :TRYAT
-@echo You could try running alltest1.cmd ..\build\cmake\Release\Tidy5.exe tmp
+@echo You could try running alltest1.bat ..\build\cmake\Release\Tidy5.exe tmp
 @echo but essentially this file should be run using the alltestc.bat batch file.
 @echo.
 @pause

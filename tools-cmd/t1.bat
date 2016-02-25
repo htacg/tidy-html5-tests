@@ -11,7 +11,7 @@
 @REM Rather than altering this file, which will be flagged by git,
 @REM I copy it to say a temp1.bat, and modify that to suit my testing
 @REM
-@REM There is also an 'alltest.cmd' which runs some 227 tests that 
+@REM There is also an 'alltest.bat' which runs some 227 tests that 
 @REM gets the case listed in 'testcases.txt' file.
 @REM
 @REM =================================================================
@@ -61,10 +61,10 @@
 
 %TIDY% -v
 @echo.
-@echo Doing '@call onetest.cmd %1 %2'
-@echo Doing '@call onetest.cmd %1 %2' >> %TMPTEST%
+@echo Doing '@call onetest.bat %1 %2'
+@echo Doing '@call onetest.bat %1 %2' >> %TMPTEST%
 
-@call onetest.cmd %1 %2
+@call onetest.bat %1 %2
 
 @echo See ouput in %TMPTEST%
 

@@ -1,5 +1,5 @@
 @echo off
-REM onetest.cmd - execute a single test case
+REM onetest.bat - execute a single test case
 REM
 REM (c) 1998-2006 (W3C) MIT, ERCIM, Keio University
 REM See tidy.c for the copyright notice.
@@ -91,7 +91,7 @@ goto done
 @goto TRYAT
 
 :TRYAT
-@echo Try running alltest.cmd ..\build\cmake\Release\Tidy5.exe tmp
+@echo Try running alltest.bat ..\build\cmake\Release\Tidy5.exe tmp
 @echo ==============================================================
 @pause
 @goto done
