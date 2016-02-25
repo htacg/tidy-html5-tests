@@ -1,26 +1,26 @@
 @echo off
+setlocal enabledelayedexpansion
 
-@REM =================================================================
-@REM xmltest.bat - execute all XML test cases
-@REM
-@REM (c) 1998-2003 (W3C) MIT, ERCIM, Keio University
-@REM See tidy.c for the copyright notice.
-@REM
-@REM <URL:http://www.html-tidy.org/>
-@REM =================================================================
+REM #======================================================================
+REM # xmltest.bat - execute all XML test cases
+REM #
+REM # (c) 1998-2003 (W3C) MIT, ERCIM, Keio University
+REM # See tidy.c for the copyright notice.
+REM #
+REM # <URL:http://www.html-tidy.org/>
+REM #======================================================================
 
-@REM # Allow user to specify a different Tidy. Do this before any setlocal!
+
+@REM # Allow user to specify a different Tidy.
 @IF NOT "%~1" == "" (
     echo Setting TY_TIDY_PATH to "%~1"
     set TY_TIDY_PATH="%~1"
 )
 
-@REM setup the ENVIRONMENT. Do this before any setlocal!
-set original_cases_setname=%TY_CASES_SETNAME%
+@REM setup the ENVIRONMENT.
 set TY_CASES_SETNAME=xml
 @call _environment.bat :set_environment
 
-@setlocal
 
 @if NOT DEFINED TY_TIDY_PATH goto SET_TY_TIDY_PATH
 @set TIDY=%TY_TIDY_PATH%
@@ -56,6 +56,3 @@ set TY_CASES_SETNAME=xml
 @goto END
 
 :END
-
-@endlocal
-set TY_CASES_SETNAME=%original_cases_setname%
