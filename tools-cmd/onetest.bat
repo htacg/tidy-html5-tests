@@ -8,8 +8,14 @@ REM # (c) 1998-2006 (W3C) MIT, ERCIM, Keio University
 REM # See tidy.c for the copyright notice.
 REM #
 REM # <URL:http://www.html-tidy.org/>
+REM #
+REM # used-by t1.bat, alltest.bat, xmltest.bat
 REM #======================================================================
 
+
+REM ------------------------------------------------
+REM  Requirements checks
+REM ------------------------------------------------
 if "%TIDY%." == "." goto Err1
 if NOT EXIST %TIDY% goto Err2
 if "%TIDYOUT%." == "." goto Err3
@@ -20,6 +26,9 @@ if "%TMPTEST%x" == "x" goto Err10
 if "%1x" == "x" goto Err8
 if "%2x" == "x" goto Err9
 
+REM ------------------------------------------------
+REM  Setup test parameters and files
+REM ------------------------------------------------
 set TESTNO=%1
 set EXPECTED=%2
 
@@ -36,18 +45,23 @@ set HTML_TIDY=
 REM If no test specific config file, use default.
 if NOT exist %CFGFILE% set CFGFILE=%TY_CONFIG_DEFAULT%
 
-REM Get specific input file name
+REM ------------------------------------------------
+REM  Get specific input file names, and check them
+REM ------------------------------------------------
 set INFILE=
 for %%F in ( %INFILES% ) do set INFILE=%%F 
 if "%INFILE%." == "." goto Err6
 if NOT EXIST %INFILE% goto Err7
 
-REM Remove any pre-exising test outputs
+REM ------------------------------------------------
+REM  Remove any pre-exising test outputs
+REM ------------------------------------------------
 if exist %MSGFILE%  del %MSGFILE%
 if exist %TIDYFILE% del %TIDYFILE%
 
-REM Noisy output, or quiet
-REM echo Testing %1 input %INFILE% config %CFGFILE% ...
+REM ------------------------------------------------
+REM  Begin tidying and testing
+REM ------------------------------------------------
 echo Doing: '%TIDY% -f %MSGFILE% -config %CFGFILE% %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o %TIDYFILE% %INFILE% >> %TMPTEST%
 
 %TIDY% -f %MSGFILE% -config %CFGFILE% %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o %TIDYFILE% %INFILE%
@@ -63,6 +77,9 @@ echo *** Failed - got %STATUS%, expected %EXPECTED% *** >> %TMPTEST%
 type %MSGFILE% >> %TMPTEST%
 goto done
 
+REM ------------------------------------------------
+REM  Messages and Exception Handlers
+REM ------------------------------------------------
 :Err1
 echo ==============================================================
 echo ERROR: runtime exe not set in TIDY environment variable ...

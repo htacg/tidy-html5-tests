@@ -15,8 +15,8 @@ IF NOT "%~1" == "" (
     set TY_TIDY_PATH=%~1
 )
 
-@if "%1" == "/help" goto USE
-@if "%1" == "/h" goto USE
+if "%1" == "/help" goto USE
+if "%1" == "/h" goto USE
 
 REM check for input file
 if NOT EXIST %TY_EXPECTS_FILE% goto Err0
@@ -49,7 +49,7 @@ if NOT EXIST %TIDYOUT%\nul goto Err2
 :GOTDIR
 
 set TMPTEST=%TY_RESULTS_FILE%
-if EXIST %TMPTEST% @del %TMPTEST%
+if EXIST %TMPTEST% del %TMPTEST%
 
 echo Processing input test case list from %TY_CASES_DIR%
 echo Each test will be passed to onetestc.bat for processing...

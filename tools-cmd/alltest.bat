@@ -14,52 +14,61 @@ REM #
 REM #    $Author: arnaud02 $
 REM #    $Date: 2006/12/28 10:01:44 $
 REM #    $Revision: 1.1 $
+REM #
+REM # requires onetest.bat
 REM #======================================================================
 
 
-REM setup the ENVIRONMENT.
-call _environment.bat :set_environment
-
-REM Allow user to specify a different Tidy.
+REM ------------------------------------------------
+REM  Allow user to specify a different Tidy.
+REM ------------------------------------------------
 IF NOT "%~1" == "" (
     echo Setting TY_TIDY_PATH to "%~1"
     set TY_TIDY_PATH=%~1
 )
 
+REM ------------------------------------------------
+REM  Setup the ENVIRONMENT.
+REM ------------------------------------------------
+call _environment.bat :set_environment
+
 set TMPTEST=%TY_RESULTS_FILE%
 
+REM ------------------------------------------------
+REM  Requirements checks
+REM ------------------------------------------------
 if "%1" == "/help" goto USE
 if "%1" == "/h" goto USE
 
-
-REM check for input file
 if NOT EXIST %TY_EXPECTS_FILE% goto Err0
 if NOT EXIST onetest.bat goto Err3
 if NOT EXIST %TY_CASES_DIR%\nul goto Err4
 
-REM set the runtime exe file
 if NOT DEFINED TY_TIDY_PATH goto ERR5
 set TIDY=%TY_TIDY_PATH%
 if NOT EXIST %TIDY% goto ERR1
 
-REM set the OUTPUT folder (will move later, if necessary)
+REM ------------------------------------------------
+REM  Set the output folder. We will actually build
+REM  into the standard output folder, and then move
+REM  them later if necessary.
+REM ------------------------------------------------
 set TIDYOUT=%TY_RESULTS_DIR%
 set FINALOUT=%TY_RESULTS_DIR%
 
-REM Allow user to specify a different output directory.
 IF NOT "%~2" == "" (
     echo Will move final output to "%~2"
     set FINALOUT=%~2
 )
 
-REM Create output directory if necessary.
-if EXIST %TIDYOUT%\nul goto GOTDIR
-md %TIDYOUT%
+if NOT EXIST %TIDYOUT%\nul md %TIDYOUT%
 if NOT EXIST %TIDYOUT%\nul goto Err2
-:GOTDIR
 
+REM ------------------------------------------------
+REM  Setup the report header
+REM ------------------------------------------------
 set TMPCNT=0
-for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do @set /A TMPCNT+=1
+for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do set /A TMPCNT+=1
 echo =============================== > %TMPTEST%
 echo Date %DATE% %TIME% >> %TMPTEST%
 echo Tidy EXE %TIDY%, version >> %TMPTEST%
@@ -69,13 +78,24 @@ echo Outut will be to the '%FINALOUT%' folder >> %TMPTEST%
 echo =============================== >> %TMPTEST%
 
 echo Doing %TMPCNT% tests from '%TY_EXPECTS_FILE%' file...
-set ERRTESTS=
 
-for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do @call onetest.bat %%i %%j
+REM ------------------------------------------------
+REM  Perform the testing
+REM ------------------------------------------------
+set ERRTESTS=
+for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do call onetest.bat %%i %%j
+
+REM ------------------------------------------------
+REM  Output failing test information
+REM ------------------------------------------------
 echo =============================== >> %TMPTEST%
 if "%ERRTESTS%." == "." goto DONE
 echo ERROR TESTS [%ERRTESTS%] ...
 echo ERROR TESTS [%ERRTESTS%] ... >> %TMPTEST%
+
+REM ------------------------------------------------
+REM  Final testing report
+REM ------------------------------------------------
 :DONE
 echo End %DATE% %TIME% >> %TMPTEST%
 echo =============================== >> %TMPTEST%
@@ -94,33 +114,37 @@ echo and check any differences carefully... If acceptable update 'testbase' acco
 echo.
 goto END
 
+REM ------------------------------------------------
+REM  Messages and Exception Handlers
+REM ------------------------------------------------
+
 :ERR0
-echo    ERROR: Can not locate 'testcases.txt' ... check name, and location ...
+echo ERROR: Can not locate 'testcases.txt' ... check name, and location ...
 goto END
 
 :ERR1
-echo    ERROR: Can not locate %TIDY% ... check name, and location ...
+echo ERROR: Can not locate %TIDY% ... check name, and location ...
 goto END
 
 :ERR2
-echo    ERROR: Can not create %TIDYOUT% folder ... check name, and location ...
+echo ERROR: Can not create %TIDYOUT% folder ... check name, and location ...
 goto END
 
 :ERR3
-echo    ERROR: Can not locate 'onetest.bat' ... check name, and location ...
+echo ERROR: Can not locate 'onetest.bat' ... check name, and location ...
 goto END
 
 :ERR4
-echo    ERROR: Can not locate 'input' folder ... check name, and location ...
+echo ERROR: Can not locate 'input' folder ... check name, and location ...
 goto END
 
 :ERR5
-echo    ERROR: You must define TY_TIDY_PATH, or specify the path as an argument ...
+echo ERROR: You must define TY_TIDY_PATH, or specify the path as an argument ...
 goto END
 
 :WARNING1
-echo    WARNING: You specified a directory name that already exists, so output
-echo    will be in %TY_RESULTS_DIR% and %TY_RESULTS_FILE%.
+echo WARNING: You specified a directory name that already exists, so output
+echo will be in %TY_RESULTS_DIR% and %TY_RESULTS_FILE%.
 GOTO:EOF
 
 

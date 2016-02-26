@@ -31,10 +31,10 @@ set MSGFILE=%TY_RESULTS_DIR%\case-%1.txt
 set HTML_TIDY=
 
 REM If no test specific config file, use default.
-if NOT exist %CFGFILE% @set CFGFILE=%TY_CONFIG_DEFAULT%
+if NOT exist %CFGFILE% set CFGFILE=%TY_CONFIG_DEFAULT%
 
 REM Get specific input file name
-for %%F in ( %INFILES% ) do @set INFILE=%%F
+for %%F in ( %INFILES% ) do set INFILE=%%F
 
 if EXIST %INFILE% goto DOIT
 echo ERROR: Can NOT locate [%INFILE%] ... aborting test ...
@@ -53,12 +53,12 @@ REM this has to all one line ...
 
 
 REM Create temp directory if necessary.
-if NOT EXIST %TY_TMP_DIR%\nul @md %TY_TMP_DIR%
+if NOT EXIST %TY_TMP_DIR%\nul md %TY_TMP_DIR%
 
 REM output the FIND count to the a result file
 find /c "%TESTEXPECTED%" %MSGFILE% > %TY_TMP_FILE%
 REM load the find count, token 3, into variable RESULT
-for /F "tokens=3" %%i in (%TY_TMP_FILE%) do @set RESULT=%%i
+for /F "tokens=3" %%i in (%TY_TMP_FILE%) do set RESULT=%%i
 REM test the RESULT variable ...
 if "%RESULT%." == "0." goto Err
 if "%RESULT%." == "1." goto done

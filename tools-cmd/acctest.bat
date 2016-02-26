@@ -12,7 +12,7 @@ call _environment.bat :set_environment
 if NOT EXIST %TY_TIDY_PATH% goto ERR1
 if NOT EXIST %TY_CONFIG_DEFAULT% goto ERR2
 if NOT EXIST %TY_EXPECTS_FILE% goto ERR3
-if NOT EXIST %TY_RESULTS_DIR%\nul @md %TY_RESULTS_DIR%
+if NOT EXIST %TY_RESULTS_DIR%\nul md %TY_RESULTS_DIR%
 
 echo Running ACCESS TEST suite
 echo Executable = %TY_TIDY_PATH%
@@ -24,7 +24,7 @@ echo Executable = %TY_TIDY_PATH% >>%TY_RESULTS_FILE%
 echo Input Folder = %TY_CASES_DIR% >>%TY_RESULTS_FILE%
 echo Output Folder = %TY_RESULTS_DIR% >>%TY_RESULTS_FILE%
 set FAILEDACC=
-for /F "skip=1 tokens=1,2*" %%i in (%TY_EXPECTS_FILE%) do @(call onetesta.bat %%i %%j %%k)
+for /F "skip=1 tokens=1,2*" %%i in (%TY_EXPECTS_FILE%) do (call onetesta.bat %%i %%j %%k)
 if "%FAILEDACC%." == "." goto SUCCESS
 echo FAILED [%FAILEDACC%] ...
 goto END

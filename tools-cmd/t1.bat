@@ -2,13 +2,15 @@
 setlocal enabledelayedexpansion
 
 REM #======================================================================
-REM # A convenient run one test giving the number and expected exit
+REM # A convenient run one test giving the number and expected exit.
 REM #
 REM # This is to run just one, like "t1 1642186-1 0 [tidy_path]"
 REM #
 REM # Note that you must specify as the third argument a path to tidy,
 REM # or alternatively set the TY_TIDY_PATH environment variable. In
 REM # addition the output folder has to exist.
+REM #
+REM # requires onetest.bat
 REM #======================================================================
 
 REM ------------------------------------------------
@@ -25,20 +27,21 @@ REM ------------------------------------------------
 call _environment.bat :set_environment
 
 set TIDY=%TY_TIDY_PATH%
-
 set TIDYOUT=%TY_RESULTS_BASE_DIR%
 set TMPTEST=%TY_RESULTS_FILE%
 
+REM ------------------------------------------------
+REM  Requirements checks
+REM ------------------------------------------------
 if NOT EXIST %TIDYOUT%\nul goto NOOUT
 if NOT DEFINED TIDY goto SET_TY_TIDY_PATH
 if NOT EXIST %TIDY% goto NOEXE
-
-REM ------------------------------------------------
-REM  Check user input
-REM ------------------------------------------------
 if "%~1x" == "x" goto HELP
 if "%~2x" == "x" goto HELP
 
+REM ------------------------------------------------
+REM  Setup our file names, and additional checks.
+REM ------------------------------------------------
 set TMPFIL=%TY_CASES_DIR%\case-%1.xhtml
 if NOT EXIST %TMPFIL% (
     set TMPFIL=%TY_CASES_DIR%\case-%1.xml
@@ -54,6 +57,10 @@ set TMPCFG=%TY_CONFIG_DEFAULT%
 if NOT EXIST %TMPFIL% goto NOFIL
 if NOT EXIST %TMPCFG% goto NOCFG
 
+REM ------------------------------------------------
+REM  Begin testing by ensuring tidy works, and
+REM  capture and check the expected output files.
+REM ------------------------------------------------
 echo Test 1 case %DATE% %TIME% > %TMPTEST%
 %TIDY% -v >> %TMPTEST%
 if ERRORLEVEL 1 goto NOTIDY
@@ -79,7 +86,7 @@ if NOT EXIST %TMPOUT1% goto NOFIL2
 if NOT EXIST %TMPOUT2% goto NOFIL2
 
 REM ------------------------------------------------
-REM Compare the outputs, exactly
+REM  Compare the outputs, exactly
 REM ------------------------------------------------
 set TMPOPTS=-ua
 set ERRCNT=0
@@ -90,6 +97,10 @@ diff %TMPOPTS% %TMPFIL1% %TMPFIL2%
 if ERRORLEVEL 1 goto GOTD1
 echo Files appear exactly the same...
 goto DODIF2
+
+REM ------------------------------------------------
+REM  Messages and Exception Handlers
+REM ------------------------------------------------
 
 :GOTD1
 call :ISDIFF
