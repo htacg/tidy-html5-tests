@@ -10,10 +10,22 @@ REM #
 REM # <URL:http://www.html-tidy.org/>
 REM #======================================================================
 
-REM setup the ENVIRONMENT.
+
+REM ------------------------------------------------
+REM  Setup the ENVIRONMENT.
+REM ------------------------------------------------
 call _environment.bat :set_environment
 
+REM ------------------------------------------------
+REM  Echo here so we know what we're testing if
+REM  the script fails for some reason.
+REM ------------------------------------------------
 echo Testing %1 %2 %3
+
+REM ------------------------------------------------
+REM  Setup test parameters and files, and check
+REM  them.
+REM ------------------------------------------------
 set TESTNO=%1
 set TESTEXPECTED=%2
 set ACCESSLEVEL=%3
@@ -30,27 +42,32 @@ set MSGFILE=%TY_RESULTS_DIR%\case-%1.txt
 
 set HTML_TIDY=
 
-REM If no test specific config file, use default.
 if NOT exist %CFGFILE% set CFGFILE=%TY_CONFIG_DEFAULT%
 
-REM Get specific input file name
+REM ------------------------------------------------
+REM  Get the specific input files name
+REM ------------------------------------------------
 for %%F in ( %INFILES% ) do set INFILE=%%F
-
 if EXIST %INFILE% goto DOIT
+
+REM ------------------------------------------------
+REM  Report missing input files.
+REM ------------------------------------------------
 echo ERROR: Can NOT locate [%INFILE%] ... aborting test ...
 echo ======================================= >>%TY_RESULTS_FILE%
 echo Testing %1 %2 %3 >>%TY_RESULTS_FILE%
 echo ERROR: Can NOT locate [%INFILE%] ... aborting test ... >>%TY_RESULTS_FILE%
 goto done
 
+REM ------------------------------------------------
+REM  Report missing input files.
+REM ------------------------------------------------
 :DOIT
-REM Remove any pre-existing test outputs
 if exist %MSGFILE%  del %MSGFILE%
 if exist %TIDYFILE% del %TIDYFILE%
 
 REM this has to all one line ...
 %TY_TIDY_PATH% -f %MSGFILE% --accessibility-check %ACCESSLEVEL% -config %CFGFILE% --gnu-emacs yes --tidy-mark no -o %TIDYFILE% %INFILE%
-
 
 REM Create temp directory if necessary.
 if NOT EXIST %TY_TMP_DIR%\nul md %TY_TMP_DIR%
@@ -62,9 +79,11 @@ for /F "tokens=3" %%i in (%TY_TMP_FILE%) do set RESULT=%%i
 REM test the RESULT variable ...
 if "%RESULT%." == "0." goto Err
 if "%RESULT%." == "1." goto done
-REM echo note - test '%TESTEXPECTED%' found %RESULT% times in file '%INFILE%'
 goto done
 
+REM ------------------------------------------------
+REM  Report result is an error.
+REM ------------------------------------------------
 :Err
 echo FAILED --- test '%TESTEXPECTED%' not detected in file '%INFILE%'
 type %MSGFILE%
@@ -77,6 +96,10 @@ echo FAILED --- test '%TESTEXPECTED%' not detected in file '%MSGFILE%', as follo
 type %MSGFILE% >>%TY_RESULTS_FILE%
 echo FAILED --- test '%TESTEXPECTED%' not detected in above >>%TY_RESULTS_FILE%
 goto done
+
+REM ------------------------------------------------
+REM  Messages and Exception Handlers
+REM ------------------------------------------------
 
 :NOTEST
 echo Error: NO test number given as the first command!
