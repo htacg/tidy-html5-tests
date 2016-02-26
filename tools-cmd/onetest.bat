@@ -16,12 +16,12 @@ REM #======================================================================
 REM ------------------------------------------------
 REM  Requirements checks
 REM ------------------------------------------------
-if "%TIDY%." == "." goto Err1
-if NOT EXIST %TIDY% goto Err2
-if "%TIDYOUT%." == "." goto Err3
-if NOT EXIST %TIDYOUT%\nul goto Err4
+if "%TY_TIDY_PATH%." == "." goto Err1
+if NOT EXIST %TY_TIDY_PATH% goto Err2
+if "%TY_RESULTS_BASE_DIR%." == "." goto Err3
+if NOT EXIST %TY_RESULTS_BASE_DIR%\nul goto Err4
 if NOT EXIST %TY_CASES_DIR%\nul goto Err5
-if "%TMPTEST%x" == "x" goto Err10
+if "%TY_RESULTS_FILE%x" == "x" goto Err10
 
 if "%1x" == "x" goto Err8
 if "%2x" == "x" goto Err9
@@ -62,19 +62,19 @@ if exist %TIDYFILE% del %TIDYFILE%
 REM ------------------------------------------------
 REM  Begin tidying and testing
 REM ------------------------------------------------
-echo Doing: '%TIDY% -f %MSGFILE% -config %CFGFILE% %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o %TIDYFILE% %INFILE% >> %TMPTEST%
+echo Doing: '%TY_TIDY_PATH% -f %MSGFILE% -config %CFGFILE% %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o %TIDYFILE% %INFILE% >> %TY_RESULTS_FILE%
 
-%TIDY% -f %MSGFILE% -config %CFGFILE% %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o %TIDYFILE% %INFILE%
+%TY_TIDY_PATH% -f %MSGFILE% -config %CFGFILE% %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o %TIDYFILE% %INFILE%
 set STATUS=%ERRORLEVEL%
 echo Testing %1, expect %EXPECTED%, got %STATUS%, msg %MSGFILE%
-echo Testing %1, expect %EXPECTED%, got %STATUS%, msg %MSGFILE% >> %TMPTEST%
+echo Testing %1, expect %EXPECTED%, got %STATUS%, msg %MSGFILE% >> %TY_RESULTS_FILE%
 
 if %STATUS% EQU %EXPECTED% goto done
 set ERRTESTS=%ERRTESTS% %TESTNO%
 echo *** Failed - got %STATUS%, expected %EXPECTED% ***
 type %MSGFILE%
-echo *** Failed - got %STATUS%, expected %EXPECTED% *** >> %TMPTEST%
-type %MSGFILE% >> %TMPTEST%
+echo *** Failed - got %STATUS%, expected %EXPECTED% *** >> %TY_RESULTS_FILE%
+type %MSGFILE% >> %TY_RESULTS_FILE%
 goto done
 
 REM ------------------------------------------------
@@ -82,32 +82,32 @@ REM  Messages and Exception Handlers
 REM ------------------------------------------------
 :Err1
 echo ==============================================================
-echo ERROR: runtime exe not set in TIDY environment variable ...
+echo ERROR: exe not set in TY_TIDY_PATH environment variable ...
 echo ==============================================================
 goto TRYAT
 
 :Err2
 echo ==============================================================
-echo ERROR: runtime exe %TIDY% not found ... check name, location ...
+echo ERROR: exe %TY_TIDY_PATH% not found; check name, location ...
 echo ==============================================================
 goto TRYAT
 
 :Err3
-echo ==============================================================
-echo ERROR: output folder TIDYOUT not set in environment ...
-echo ==============================================================
+echo ====================================================================
+echo ERROR: output folder TY_RESULTS_BASE_DIR not set in environment ...
+echo ====================================================================
 goto TRYAT
 
 :Err4
 echo ==============================================================
-echo ERROR: output folder %TIDYOUT% does not exist ...
+echo ERROR: output folder %TY_RESULTS_BASE_DIR% does not exist ...
 echo ==============================================================
 goto TRYAT
 
 :Err5
-echo ==============================================================
+echo =======================================================================
 echo ERROR: input folder 'input' does not exist ... check name, location ..
-echo ==============================================================
+echo =======================================================================
 goto TRYAT
 
 :TRYAT
@@ -139,7 +139,7 @@ echo.
 goto done
 
 :Err10
-echo ERROR: TMPTEST not set in evironment!
+echo ERROR: TY_RESULTS_FILE not set in evironment!
 echo.
 goto done
 

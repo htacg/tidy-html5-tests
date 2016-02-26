@@ -26,16 +26,12 @@ REM  Setup the ENVIRONMENT.
 REM ------------------------------------------------
 call _environment.bat :set_environment
 
-set TIDY=%TY_TIDY_PATH%
-set TIDYOUT=%TY_RESULTS_BASE_DIR%
-set TMPTEST=%TY_RESULTS_FILE%
-
 REM ------------------------------------------------
 REM  Requirements checks
 REM ------------------------------------------------
-if NOT EXIST %TIDYOUT%\nul goto NOOUT
-if NOT DEFINED TIDY goto SET_TY_TIDY_PATH
-if NOT EXIST %TIDY% goto NOEXE
+if NOT EXIST %TY_RESULTS_BASE_DIR%\nul goto NOOUT
+if NOT DEFINED TY_TIDY_PATH goto SET_TY_TIDY_PATH
+if NOT EXIST %TY_TIDY_PATH% goto NOEXE
 if "%~1x" == "x" goto HELP
 if "%~2x" == "x" goto HELP
 
@@ -61,18 +57,18 @@ REM ------------------------------------------------
 REM  Begin testing by ensuring tidy works, and
 REM  capture and check the expected output files.
 REM ------------------------------------------------
-echo Test 1 case %DATE% %TIME% > %TMPTEST%
-%TIDY% -v >> %TMPTEST%
+echo Test 1 case %DATE% %TIME% > %TY_RESULTS_FILE%
+%TY_TIDY_PATH% -v >> %TY_RESULTS_FILE%
 if ERRORLEVEL 1 goto NOTIDY
 
-%TIDY% -v
+%TY_TIDY_PATH% -v
 echo.
 echo Doing 'call onetest.bat %1 %2'
-echo Doing 'call onetest.bat %1 %2' >> %TMPTEST%
+echo Doing 'call onetest.bat %1 %2' >> %TY_RESULTS_FILE%
 
 call onetest.bat %1 %2
 
-echo See ouput in %TMPTEST%
+echo See ouput in %TY_RESULTS_FILE%
 
 set TMPFIL1=%TY_EXPECTS_DIR%\case-%1.html
 set TMPOUT1=%TY_EXPECTS_DIR%\case-%1.txt
@@ -159,19 +155,19 @@ goto END
 
 :NOEXE
 echo.
-echo Error: Unable to locate file '%TIDY%'! Has it been built? *** FIX ME ***
+echo Error: Unable to locate file '%TY_TIDY_PATH%'! Has it been built? *** FIX ME ***
 echo.
 goto END
 
 :NOTIDY
 echo.
-echo Error: Unable to run '%TIDY% -v' successfully! *** FIX ME ***
+echo Error: Unable to run '%TY_TIDY_PATH% -v' successfully! *** FIX ME ***
 echo.
 goto END
 
 :NOOUT
 echo.
-echo Error: Can NOT locate %TIDYOUT%! This MUST be created!
+echo Error: Can NOT locate %TY_RESULTS_BASE_DIR%! This MUST be created!
 echo This script does NOT create any directories...
 echo.
 goto END
@@ -199,6 +195,7 @@ if "%~1x" == "x" goto HELP2
 echo - Missing expected value. See testcases.txt for list available...
 echo Checking testcases.txt for test %1
 fa4 "%~1" testcases.txt
+
 :HELP2
 echo.
 

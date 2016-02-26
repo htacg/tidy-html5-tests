@@ -27,20 +27,16 @@ REM ------------------------------------------------
 set TY_CASES_SETNAME=xml
 call _environment.bat :set_environment
 
-set TIDYOUT=%TY_RESULTS_BASE_DIR%
-
 REM ------------------------------------------------
 REM  Requirements checks and verification
 REM ------------------------------------------------
 if NOT DEFINED TY_TIDY_PATH goto SET_TY_TIDY_PATH
-set TIDY=%TY_TIDY_PATH%
-if NOT EXIST %TIDY% goto NOEXE
+if NOT EXIST %TY_TIDY_PATH% goto NOEXE
 if NOT EXIST %TY_EXPECTS_FILE% goto NOXML
 
-if NOT EXIST %TIDYOUT%\nul md %TY_TMP_DIR%
+if NOT EXIST %TY_RESULTS_BASE_DIR%\nul md %TY_TMP_DIR%
 
-set TMPTEST=%TY_RESULTS_FILE%
-if EXIST %TMPTEST% del %TMPTEST%
+if EXIST %TY_RESULTS_FILE% del %TY_RESULTS_FILE%
 
 REM ------------------------------------------------
 REM  Performing the testing
@@ -49,7 +45,7 @@ echo Commencing xml tests from %TY_EXPECTS_FILE%
 
 for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do (call onetest.bat %%i %%j)
 
-echo Full output written to %TMPTEST%
+echo Full output written to %TY_RESULTS_FILE%
 
 goto END
 
@@ -62,7 +58,7 @@ echo Error: Can NOT locate %TY_EXPECTS_FILE%! *** FIX ME ***
 goto END
 
 :NOEXE
-echo Can NOT locate %TIDY% executable! *** FIX ME ***
+echo Can NOT locate %TY_TIDY_PATH% executable! *** FIX ME ***
 goto END
 
 :SET_TY_TIDY_PATH

@@ -32,8 +32,6 @@ REM  Setup the ENVIRONMENT.
 REM ------------------------------------------------
 call _environment.bat :set_environment
 
-set TMPTEST=%TY_RESULTS_FILE%
-
 REM ------------------------------------------------
 REM  Requirements checks
 REM ------------------------------------------------
@@ -45,15 +43,13 @@ if NOT EXIST onetest.bat goto Err3
 if NOT EXIST %TY_CASES_DIR%\nul goto Err4
 
 if NOT DEFINED TY_TIDY_PATH goto ERR5
-set TIDY=%TY_TIDY_PATH%
-if NOT EXIST %TIDY% goto ERR1
+if NOT EXIST %TY_TIDY_PATH% goto ERR1
 
 REM ------------------------------------------------
 REM  Set the output folder. We will actually build
 REM  into the standard output folder, and then move
 REM  them later if necessary.
 REM ------------------------------------------------
-set TIDYOUT=%TY_RESULTS_DIR%
 set FINALOUT=%TY_RESULTS_DIR%
 
 IF NOT "%~2" == "" (
@@ -61,21 +57,21 @@ IF NOT "%~2" == "" (
     set FINALOUT=%~2
 )
 
-if NOT EXIST %TIDYOUT%\nul md %TIDYOUT%
-if NOT EXIST %TIDYOUT%\nul goto Err2
+if NOT EXIST %TY_RESULTS_BASE_DIR%\nul md %TY_RESULTS_BASE_DIR%
+if NOT EXIST %TY_RESULTS_BASE_DIR%\nul goto Err2
 
 REM ------------------------------------------------
 REM  Setup the report header
 REM ------------------------------------------------
 set TMPCNT=0
 for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do set /A TMPCNT+=1
-echo =============================== > %TMPTEST%
-echo Date %DATE% %TIME% >> %TMPTEST%
-echo Tidy EXE %TIDY%, version >> %TMPTEST%
-%TIDY% -v >> %TMPTEST%
-echo Input list of %TMPCNT% tests from '%TY_EXPECTS_FILE%' file >> %TMPTEST%
-echo Outut will be to the '%FINALOUT%' folder >> %TMPTEST%
-echo =============================== >> %TMPTEST%
+echo =============================== > %TY_RESULTS_FILE%
+echo Date %DATE% %TIME% >> %TY_RESULTS_FILE%
+echo Tidy EXE %TY_TIDY_PATH%, version >> %TY_RESULTS_FILE%
+%TY_TIDY_PATH% -v >> %TY_RESULTS_FILE%
+echo Input list of %TMPCNT% tests from '%TY_EXPECTS_FILE%' file >> %TY_RESULTS_FILE%
+echo Outut will be to the '%FINALOUT%' folder >> %TY_RESULTS_FILE%
+echo =============================== >> %TY_RESULTS_FILE%
 
 echo Doing %TMPCNT% tests from '%TY_EXPECTS_FILE%' file...
 
@@ -88,27 +84,27 @@ for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do call onetest.bat %%i %%j
 REM ------------------------------------------------
 REM  Output failing test information
 REM ------------------------------------------------
-echo =============================== >> %TMPTEST%
+echo =============================== >> %TY_RESULTS_FILE%
 if "%ERRTESTS%." == "." goto DONE
 echo ERROR TESTS [%ERRTESTS%] ...
-echo ERROR TESTS [%ERRTESTS%] ... >> %TMPTEST%
+echo ERROR TESTS [%ERRTESTS%] ... >> %TY_RESULTS_FILE%
 
 REM ------------------------------------------------
 REM  Final testing report
 REM ------------------------------------------------
 :DONE
-echo End %DATE% %TIME% >> %TMPTEST%
-echo =============================== >> %TMPTEST%
-IF NOT "%TIDYOUT%" == "%FINALOUT%" (
+echo End %DATE% %TIME% >> %TY_RESULTS_FILE%
+echo =============================== >> %TY_RESULTS_FILE%
+IF NOT "%TY_RESULTS_BASE_DIR%" == "%FINALOUT%" (
     IF EXIST %TY_RESULTS_BASE_DIR%\%FINALOUT% goto WARNING1
     IF EXIST %TY_RESULTS_BASE_DIR%\%FINALOUT%.txt WARNING1
-    echo Setting %TIDYOUT% to desired %FINALOUT%...
-    RENAME %TIDYOUT% %FINALOUT%
-    RENAME %TMPTEST% %FINALOUT%.txt
-    set TMPTEST=%TY_RESULTS_BASE_DIR%\%FINALOUT%.txt
+    echo Setting %TY_RESULTS_BASE_DIR% to desired %FINALOUT%...
+    RENAME %TY_RESULTS_BASE_DIR% %FINALOUT%
+    RENAME %TY_RESULTS_FILE% %FINALOUT%.txt
+    set TY_RESULTS_FILE=%TY_RESULTS_BASE_DIR%\%FINALOUT%.txt
     )
 echo.
-echo See %TMPTEST% file for list of tests done...
+echo See %TY_RESULTS_FILE% file for list of tests done...
 echo And compare folders 'diff -u testbase %FINALOUT% ^> temp.diff'
 echo and check any differences carefully... If acceptable update 'testbase' accordingly...
 echo.
@@ -123,11 +119,11 @@ echo ERROR: Can not locate 'testcases.txt' ... check name, and location ...
 goto END
 
 :ERR1
-echo ERROR: Can not locate %TIDY% ... check name, and location ...
+echo ERROR: Can not locate %TY_TIDY_PATH% ... check name, and location ...
 goto END
 
 :ERR2
-echo ERROR: Can not create %TIDYOUT% folder ... check name, and location ...
+echo ERROR: Can not create %TY_RESULTS_BASE_DIR% folder ... check name, and location ...
 goto END
 
 :ERR3
