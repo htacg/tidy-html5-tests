@@ -3,23 +3,7 @@
 @REM Uses onetest.bat and _setenv.bat
 @set TY_ONETEST=onetestG.bat
 @set TY_ENVBAT=_setenvG.bat
-@REM ########################################################
-@REM ### *** SET LOCATION OF TIDY EXE TO USE FOR TEST *** ###
-@REM ########################################################
-@REM ------------------------------------------------
-@REM  Allow user to specify a different Tidy.
-@REM ------------------------------------------------
-@IF NOT "%~1" == "" (
-    @echo Setting TY_TIDY_PATH to "%~1"
-    @set TY_TIDY_PATH=%~1
-)
-@if NOT EXIST %TY_ENVBAT% goto ERR1
-@REM ------------------------------------------------
-@REM  Setup the ENVIRONMENT.
-@REM ------------------------------------------------
-@call %TY_ENVBAT% :set_environment
-@REM  Show the established environment
-@call %TY_ENVBAT% :report_environment
+
 @REM ------------------------------------------------
 @REM  Check for HELP, in many forms...
 @REM ------------------------------------------------
@@ -30,6 +14,34 @@
 @if /I "%1" == "--help" goto USE
 @if "%1" == "-?" goto USE
 
+@REM ########################################################
+@REM ### *** SET LOCATION OF TIDY EXE TO USE FOR TEST *** ###
+@REM ########################################################
+@REM ------------------------------------------------
+@REM  Allow user to specify a different Tidy.
+@REM ------------------------------------------------
+@if "%~1x" == "x" goto DNCMD
+    @set TY_TIDY_PATH=%~1
+    @echo Set USER TY_TIDY_PATH=%TY_TIDY_PATH%
+)
+@REM  Allow user to specify a output/results folder.
+@if "%~2x" == "x" goto DNCMD
+    set TY_RESULTS_DIR=%~2
+    set TY_RESULTS_FILE=%TY_RESULTS_DIR%-results.txt
+    @echo Set USER TY_RESULTS_DIR=%TY_RESULTS_DIR%
+    @echo Set USER TY_RESULTS_FILE=%TY_RESULTS_FILE%
+)
+:DNCMD
+
+@REM  Check we have a set 'environment' file
+@if NOT EXIST %TY_ENVBAT% goto ERR1
+@REM ------------------------------------------------
+@REM  Setup the ENVIRONMENT.
+@REM ------------------------------------------------
+@call %TY_ENVBAT% :set_environment
+@REM  Show the established environment
+@call %TY_ENVBAT% :report_environment
+
 @REM ------------------------------------------------
 @REM  Requirements checks
 @REM ------------------------------------------------
@@ -39,47 +51,45 @@
 @if NOT EXIST %TY_VERSION_FILE% goto ERR7
 @set /p TY_TEST_VERS=< %TY_VERSION_FILE%
 
-@REM  Set the output folder. We will actually build
-@REM  into the standard output folder, and then move
-@REM  them later if necessary.
-@REM  Do not like this, but keep for now...
-set FINALOUT=%TY_RESULTS_DIR%
-
-@IF NOT "%~2" == "" (
-    @echo THIS OPTION NOT YET IMPLEMENTED! Sorry... come back soon...
-    @goto END
-    @echo Will move final output to "%~2"
-    @set FINALOUT=%~2
-    @if EXIST %FINALOUT% goto ERR6
-    @if EXIST %FINALOUT%\nul goto ERR6
-)
-
 @if NOT EXIST %TY_RESULTS_BASE_DIR%\nul md %TY_RESULTS_BASE_DIR%
 @if NOT EXIST %TY_RESULTS_BASE_DIR%\nul goto ERR2
 
 @if "%TY_TIDY_PATH%x" == "x" goto NOTP
 %TY_TIDY_PATH% -v
 @if ERRORLEVEL 1 goto NOEXE
+
+@set TMPCNT=0
+@for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do set /A TMPCNT+=1
+@if "%TMPCNT%x" == "0x" goto NOTESTS
+
+@REM Show and pause for 10 seconds...
+@echo.
+@if EXIST %TY_RESULTS_DIR%\nul (
+    @echo Note OUTPUT directory %TY_RESULTS_DIR% aleady exists, and will be overwritten!
+) else (
+    @echo Note OUTPUT directory %TY_RESULTS_DIR% does not exist, and will be created!
+)
 @echo.
 @echo CHECK: Is this the correct version of tidy you want to use?
 @echo The current test version file %TY_VERSION_FILE% shows %TY_TEST_VERS%
+@echo Will perform %TMPCNT% different tests...
 @echo.
-@pause
+@choice /D Y /T 10 /M "Pausing for 10 seconds. Def=Y"
+@if ERRORLEVEL 2 goto GOTNO
+
 @REM ------------------------------------------------
 @REM  Setup the report header
 @REM ------------------------------------------------
-@set TMPCNT=0
-@for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do set /A TMPCNT+=1
 @echo =============================== > %TY_RESULTS_FILE%
 @echo Date %DATE% %TIME% >> %TY_RESULTS_FILE%
 @echo Tidy EXE %TY_TIDY_PATH%, version >> %TY_RESULTS_FILE%
 %TY_TIDY_PATH% -v >> %TY_RESULTS_FILE%
 @echo Input list of %TMPCNT% tests from '%TY_EXPECTS_FILE%' file >> %TY_RESULTS_FILE%
-@echo Outut will be to the '%FINALOUT%' folder >> %TY_RESULTS_FILE%
+@echo Outut will be to the '%TY_RESULTS_DIR%' folder >> %TY_RESULTS_FILE%
 @echo =============================== >> %TY_RESULTS_FILE%
-
+@echo.
 @echo Doing %TMPCNT% tests from '%TY_EXPECTS_FILE%' file...
-
+@echo.
 @REM ------------------------------------------------
 @REM  Perform the testing
 @REM ------------------------------------------------
@@ -93,6 +103,9 @@ set FINALOUT=%TY_RESULTS_DIR%
 @if "%ERRTESTS%." == "." goto NOERRS
 @echo ERROR TESTS [%ERRTESTS%] ... FAILED TEST 1!
 @echo ERROR TESTS [%ERRTESTS%] ... FAILED TEST 1! >> %TY_RESULTS_FILE%
+@echo.
+@echo Appears there are changes in the exit value for %TMPCNT% tests - FAILED 1
+@echo Appears there are changes in the exit value for %TMPCNT% tests - FAILED 1 >> %TY_RESULTS_FILE%
 @goto DONE1
 :NOERRS
 @echo.
@@ -108,6 +121,7 @@ set FINALOUT=%TY_RESULTS_DIR%
 @echo.
 @echo Running 'diff -ua %TY_EXPECTS_DIR% %TY_RESULTS_DIR%'
 @echo Running 'diff -ua %TY_EXPECTS_DIR% %TY_RESULTS_DIR%' >> %TY_RESULTS_FILE%
+@echo =============================== >> %TY_RESULTS_FILE%
 @diff -ua %TY_EXPECTS_DIR% %TY_RESULTS_DIR% >> %TY_RESULTS_FILE%
 @if ERRORLEVEL 1 goto GOTDIF
 @echo =============================== >> %TY_RESULTS_FILE%
@@ -118,9 +132,10 @@ set FINALOUT=%TY_RESULTS_DIR%
 @goto DONE
 :GOTDIF
 @echo =============================== >> %TY_RESULTS_FILE%
-@echo Appear to have differences in some output files for %TMPCNT% tests
-@echo Appear to have differences in some output files for %TMPCNT% tests >> %TY_RESULTS_FILE%
-@echo These results must be carefully checked in %TY_RESULTS_FILE% for details.
+@echo.
+@echo Appear to have differences in some output files for %TMPCNT% tests - FAILED 2
+@echo Appear to have differences in some output files for %TMPCNT% tests - FAILED 2 >> %TY_RESULTS_FILE%
+@echo These results must be carefully checked in %TY_RESULTS_FILE%!
 @echo.
 @goto DONE
 :NODIFF
@@ -138,21 +153,6 @@ set FINALOUT=%TY_RESULTS_DIR%
 @echo End %DATE% %TIME% >> %TY_RESULTS_FILE%
 @echo =============================== >> %TY_RESULTS_FILE%
 @echo See %TY_RESULTS_FILE% for full test details...
-echo.
-@REM Not happy with this, so want another solutions!
-@REM This would take away the previous RESULTS, which I may want to keep
-@REM Want to try to fully RESET the output to a NEW output,
-@REM BEFORE running any output, and running the tests...
-@goto END
-
-@if NOT "%FINALOUT%" == "%TY_RESULTS_DIR%" (
-    @echo Setting %TY_RESULTS_DIR% to desired %FINALOUT%...
-    @move %TY_RESULTS_DIR% %FINALOUT%
-    @if ERRORLEVEL 1 goto ERR8
-    @move %TY_RESULTS_FILE% %FINALOUT%.txt
-    @if ERRORLEVEL 1 goto ERR9
-    @set TY_RESULTS_FILE=%FINALOUT%.txt
-    )
 echo.
 @goto END
 
@@ -180,21 +180,8 @@ goto END
 @echo ERROR: Can not locate '%TY_CASES_DIR%' folder! Check name, and location ...
 @goto END
 
-:ERR6
-@echo ERROR: The output directory %FINALOUT% already exists!
-@echo Either delete it, or choose another output directory.
-@goto END
-
 :ERR7
 @echo ERROR: Can NOT locate file %TY_VERSION_FILE%! Check name, location...
-@goto END
-
-:ERR8
-@echo ERROR: Unable to move %TY_RESULTS_DIR% to %FINALOUT%
-@goto END
-
-:ERR9
-@echo ERROR: Unable to move %TY_RESULTS_FILE% to %FINALOUT%.txt
 @goto END
 
 :NOTP
@@ -210,34 +197,44 @@ goto END
 @echo.
 @goto END
 
+:NOTESTS
+@echo UGH: Got no tests from %TY_EXPECTS_FILE%! Check file...
+@goto END
+
 :USE
-@REM For now always output this above
-@REM echo.
-@REM echo  Current environment
-@REM call _environment.bat :report_environment
+@REM  Establish DEFAULT environment
+@call %TY_ENVBAT% :set_environment
+@REM  Show the established environment
+@echo.
+@echo Display of the default setup environment -
+@call %TY_ENVBAT% :report_environment
 :USE2
 @echo.
 @echo  Usage of ALLTEST.BAT
 @echo  AllTest [tidy.exe [Out_Folder]]
-@echo  tidy.exe - This is the Tidy.exe you want to use for the test.
-@echo  Out_Folder  - This is the FOLDER where you want the results put,
-@echo  relative to the %TY_RESULTS_BASE_DIR% folder.
+@echo  tidy.exe    - This is the Tidy.exe you want to use for the test.
+@echo  Out_Folder  - This is the FOLDER where you want the results put.
 @echo  This folder will be created if it does not already exist.
 @echo  These are both optional, but you must specify [tidy.exe] if you
-@echo  wish to specify [Out_Folder].
-@echo  ==================================
+@echo  wish to specify an [Out_Folder] different to the default.
+@echo  Test 1 ==================================
 @echo  ALLTEST.BAT will run a battery of test files in the input folder
-@echo  Each test name, has an expected result, given in its table.
-@echo  There will be a warning if any test file fails to give this result.
-@echo  ==================================
+@echo  Each test name, has an expected exit value, given in its table.
+@echo  There will be a warning if any test file fails to give this value.
+@echo   Test 2 ==================================
 @echo  But the main purpose is to compare the 'results' of two version of
 @echo  any two Tidy runtime exe's. Thus after you have two sets of results,
 @echo  in separate folders, the idea is to compare these two folders.
-@echo  Any directory compare utility will do, or you can download, and use
+@echo  By default diff.exe will be used, if it is available in your PATH.
+@echo  If not any directory compare utility will do, or you can download, and use
 @echo  a WIN32 port of GNU diff.exe from http://unxutils.sourceforge.net/
 @echo  ................................................................
 @echo.
 @goto END
 
+
+
+:GOTNO
+@echo Got choice No... aborted testing...
 :END
 @REM EOF

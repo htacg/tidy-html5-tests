@@ -36,8 +36,8 @@ rem ###########################################################################
     set TY_CASES_BASE_DIR=cases
     set TY_RESULTS_BASE_DIR=cases
 
-    rem # These are relative to the TY_CASES_BASE_DIR directory.
-    set TY_TMP_DIR=_tmp
+    rem # Use standard windows TEMP directory.
+    set TY_TMP_DIR=%TEMP%
 
     rem # These are expected to be in cases_base_dir directory.
     set TY_VERSION_FILE=_version.txt
@@ -82,14 +82,16 @@ rem ###########################################################################
     call :preset_environment
 
     rem # We'll use this to get the full, absolute path.
-    pushd %TY_PROJECT_ROOT_DIR%
-    set TY_PROJECT_ROOT_DIR=%CD%
-    popd
+    rem # But do we need to use full paths... why not relative
+    rem # certainly reduces output length
+    rem pushd %TY_PROJECT_ROOT_DIR%
+    rem set TY_PROJECT_ROOT_DIR=%CD%
+    rem popd
     
     rem # *Only* set TY_CASES_SETNAME if it's not already set!
     IF NOT DEFINED TY_CASES_SETNAME (set TY_CASES_SETNAME=%cases_setname%)
 
-    set TY_PROJECT_ROOT_DIR=%TY_PROJECT_ROOT_DIR%
+    rem # set TY_PROJECT_ROOT_DIR=%TY_PROJECT_ROOT_DIR%
     set TY_CASES_BASE_DIR=%TY_PROJECT_ROOT_DIR%\%TY_CASES_BASE_DIR%
     set TY_CASES_DIR=%TY_CASES_BASE_DIR%\%TY_CASES_SETNAME%
     set TY_EXPECTS_DIR=%TY_CASES_BASE_DIR%\%TY_CASES_SETNAME%-expects
@@ -97,10 +99,11 @@ rem ###########################################################################
     set TY_CONFIG_DEFAULT=%TY_CASES_DIR%\%TY_CONFIG_DEFAULT%
     set TY_VERSION_FILE=%TY_CASES_BASE_DIR%\%TY_VERSION_FILE%
     set TY_RESULTS_BASE_DIR=%TY_PROJECT_ROOT_DIR%\%TY_RESULTS_BASE_DIR%
-    set TY_RESULTS_DIR=%TY_RESULTS_BASE_DIR%\%TY_CASES_SETNAME%-results
-    set TY_RESULTS_FILE=%TY_RESULTS_BASE_DIR%\%TY_CASES_SETNAME%-results.txt
-    set TY_TMP_DIR=%TY_RESULTS_BASE_DIR%\%TY_TMP_DIR%
-    set TY_TMP_FILE=%TY_TMP_DIR%\temp.txt
+    IF NOT DEFINED TY_RESULTS_DIR (
+        set TY_RESULTS_DIR=%TY_RESULTS_BASE_DIR%\%TY_CASES_SETNAME%-results
+        set TY_RESULTS_FILE=%TY_RESULTS_BASE_DIR%\%TY_CASES_SETNAME%-results.txt
+    )
+    set TY_TMP_FILE=%TY_TMP_DIR%\temptidy.txt
 
     set cases_setname=
 
@@ -113,6 +116,7 @@ rem ###########################################################################
 
     echo        TY_TIDY_PATH = %TY_TIDY_PATH%
     echo TY_PROJECT_ROOT_DIR = %TY_PROJECT_ROOT_DIR%
+    echo    TY_CASES_SETNAME = %TY_CASES_SETNAME%
     echo   TY_CASES_BASE_DIR = %TY_CASES_BASE_DIR%
     echo        TY_CASES_DIR = %TY_CASES_DIR%
     echo      TY_EXPECTS_DIR = %TY_EXPECTS_DIR%
