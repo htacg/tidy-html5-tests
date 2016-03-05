@@ -23,14 +23,12 @@
 @if "%~1x" == "x" goto DNCMD
     @set TY_TIDY_PATH=%~1
     @echo Set USER TY_TIDY_PATH=%TY_TIDY_PATH%
-)
 @REM  Allow user to specify a output/results folder.
 @if "%~2x" == "x" goto DNCMD
-    set TY_RESULTS_DIR=%~2
-    set TY_RESULTS_FILE=%TY_RESULTS_DIR%-results.txt
+    @set TY_RESULTS_DIR=%~2
+    @set TY_RESULTS_FILE=%TY_RESULTS_DIR%-results.txt
     @echo Set USER TY_RESULTS_DIR=%TY_RESULTS_DIR%
     @echo Set USER TY_RESULTS_FILE=%TY_RESULTS_FILE%
-)
 :DNCMD
 
 @REM  Check we have a set 'environment' file
