@@ -207,8 +207,6 @@ if "%ERRCNT%x" == "0x" (
 
 :NOFIL
 @echo.
-dir input\*%1*
-@echo.
 @echo Error: Can NOT locate %TMPFIL%! Is number correct? 
 @echo.
 @goto END
