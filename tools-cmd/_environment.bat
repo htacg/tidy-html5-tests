@@ -15,6 +15,18 @@ rem ## - TY_CASES_SETNAME can be set in your environment, cli will override.
 rem ## - The output directory is based on the cases setname, unless overriden
 rem ##   by the CLI here. It will be created automatically unless the env
 rem ##   variable TY_MKDIR_CONFIRM is set to something.
+rem ##
+rem ## To change DEFAULTS permanently, change them in :PRESET_ENVIRONMENT.
+rem ## Otherwise it's best to use the CLI arguments or environment variables
+rem ## for less persistent changes.
+rem ##
+rem ## If a script crashes and you pollute your environment, you can call this
+rem ## script via `call _environment :UNSET_ENVIRONMENT` to clean it up easily.
+rem ##
+rem ## To use this with your own scripts, you'll want to :SET_ENVIRONMENT to
+rem ## use the environment as it is, or :PROCESS_CLI if you want to process
+rem ## CLI arguments (which also calls :SET_ENVIRONMENT). You can use
+rem ## :REPORT_ENVIRONMENT for debugging purposes.
 rem ###########################################################################
 
 IF "%1" == "" (
