@@ -1,169 +1,129 @@
 @echo off
-setlocal enabledelayedexpansion
+@setlocal
 
-REM #======================================================================
-REM # alltest.bat
-REM #   Execute all test cases, optionally specifying a tidy instance
-REM #   and different output folder.
-REM # 
-REM # (c) 1998-2006 (W3C) MIT, ERCIM, Keio University
-REM # See tidy.c for the copyright notice.
-REM # 
-REM # <URL:http://www.html-tidy.org/>
-REM # 
-REM #    $Author: arnaud02 $
-REM #    $Date: 2006/12/28 10:01:44 $
-REM #    $Revision: 1.1 $
-REM #
-REM # requires onetest.bat
-REM #======================================================================
+@REM #======================================================================
+@REM # alltest.bat
+@REM #
+@REM # Execute all test cases.
+@REM # 
+@REM # (c) 1998-2006 (W3C) MIT, ERCIM, Keio University
+@REM # See tidy.c for the copyright notice.
+@REM # <URL:http://www.html-tidy.org/>
+@REM #
+@REM # requires TY_ONETEST
+@REM #======================================================================
 
 
-REM ------------------------------------------------
-REM  Allow user to specify a different Tidy.
-REM ------------------------------------------------
-IF NOT "%~1" == "" (
-    echo Setting TY_TIDY_PATH to "%~1"
-    set TY_TIDY_PATH=%~1
+@REM ------------------------------------------------
+@REM  Handle the CLI, and setup and test the 
+@REM  environment. With the CLI support we can
+@REM  simply use this with -c xml, and eliminate
+@REM  the xmltest.bat script, I think.
+@REM ------------------------------------------------
+@call _environment.bat :PROCESS_CLI %*
+@if ERRORLEVEL 1 IF "%TY_WANTS_HELP%" == "" (
+  @echo.
+  @echo Stopping because something is wrong. See error messages above.
+  @echo.
+  @exit /b 1
 )
+@if NOT "%TY_WANTS_HELP%" == "" goto :HELP
 
-REM ------------------------------------------------
-REM  Setup the ENVIRONMENT.
-REM ------------------------------------------------
-call _environment.bat :set_environment
 
-REM ------------------------------------------------
-REM  Requirements checks
-REM ------------------------------------------------
-if "%1" == "/help" goto USE
-if "%1" == "/h" goto USE
+@REM ------------------------------------------------
+@REM  Setup the report header
+@REM ------------------------------------------------
+@set TMPCNT=0
+@for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do set /A TMPCNT+=1
+@for /F "delims=" %%i IN ('"%TY_TIDY_PATH%" -v') DO set version=%%i
 
-if NOT EXIST %TY_EXPECTS_FILE% goto Err0
-if NOT EXIST onetest.bat goto Err3
-if NOT EXIST %TY_CASES_DIR%\nul goto Err4
+@echo ==================================================== > "%TY_RESULTS_FILE%"
+@echo  Testing setname: %TY_CASES_SETNAME% >>                "%TY_RESULTS_FILE%"
+@echo             Date: %DATE% %TIME% >>                     "%TY_RESULTS_FILE%"
+@echo         Tidy EXE: %TY_TIDY_PATH% >>                    "%TY_RESULTS_FILE%"
+@echo     Tidy Version: %version% >>                         "%TY_RESULTS_FILE%"
+@echo   Input Manifest: %TY_EXPECTS_FILE% >>                 "%TY_RESULTS_FILE%"
+@echo    Output folder: %TY_RESULTS_DIR%\ >>                 "%TY_RESULTS_FILE%"
+@echo Tests to Perform: %TMPCNT% >>                          "%TY_RESULTS_FILE%"
+@echo ==================================================== >>"%TY_RESULTS_FILE%"
 
-if NOT DEFINED TY_TIDY_PATH goto ERR5
-if NOT EXIST %TY_TIDY_PATH% goto ERR1
+@echo Doing %TMPCNT% tests from '%TY_EXPECTS_FILE%' file...
 
-REM ------------------------------------------------
-REM  Set the output folder. We will actually build
-REM  into the standard output folder, and then move
-REM  them later if necessary.
-REM ------------------------------------------------
-set FINALOUT=%TY_RESULTS_DIR%
 
-IF NOT "%~2" == "" (
-    echo Will move final output to "%~2"
-    set FINALOUT=%~2
+@REM ------------------------------------------------
+@REM  Perform the testing
+@REM ------------------------------------------------
+@set ERRTESTS=
+@if /i not "%TY_CASES_SETNAME%" == "access" for /F "tokens=1*"          %%i in (%TY_EXPECTS_FILE%) do (call "%TY_ONETEST%" %%i %%j)
+@if /i     "%TY_CASES_SETNAME%" == "access" for /F "skip=1 tokens=1,2*" %%i in (%TY_EXPECTS_FILE%) do (call "%TY_ONETESTA%" %%i %%j %%k)
+
+@REM ------------------------------------------------
+@REM  Output failing test information
+@REM ------------------------------------------------
+@echo ==================================================== >> "%TY_RESULTS_FILE%"
+echo.
+@if "%ERRTESTS%." == "." (
+  @echo It appears the tests executed correctly.
+  @goto DONE
 )
+@echo ERROR TESTS [%ERRTESTS%] ...
+@echo ERROR TESTS [%ERRTESTS%] ... >> "%TY_RESULTS_FILE%"
 
-if NOT EXIST %TY_RESULTS_BASE_DIR%\nul md %TY_RESULTS_BASE_DIR%
-if NOT EXIST %TY_RESULTS_BASE_DIR%\nul goto Err2
 
-REM ------------------------------------------------
-REM  Setup the report header
-REM ------------------------------------------------
-set TMPCNT=0
-for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do set /A TMPCNT+=1
-echo =============================== > %TY_RESULTS_FILE%
-echo Date %DATE% %TIME% >> %TY_RESULTS_FILE%
-echo Tidy EXE %TY_TIDY_PATH%, version >> %TY_RESULTS_FILE%
-%TY_TIDY_PATH% -v >> %TY_RESULTS_FILE%
-echo Input list of %TMPCNT% tests from '%TY_EXPECTS_FILE%' file >> %TY_RESULTS_FILE%
-echo Outut will be to the '%FINALOUT%' folder >> %TY_RESULTS_FILE%
-echo =============================== >> %TY_RESULTS_FILE%
-
-echo Doing %TMPCNT% tests from '%TY_EXPECTS_FILE%' file...
-
-REM ------------------------------------------------
-REM  Perform the testing
-REM ------------------------------------------------
-set ERRTESTS=
-for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do call onetest.bat %%i %%j
-
-REM ------------------------------------------------
-REM  Output failing test information
-REM ------------------------------------------------
-echo =============================== >> %TY_RESULTS_FILE%
-if "%ERRTESTS%." == "." goto DONE
-echo ERROR TESTS [%ERRTESTS%] ...
-echo ERROR TESTS [%ERRTESTS%] ... >> %TY_RESULTS_FILE%
-
-REM ------------------------------------------------
-REM  Final testing report
-REM ------------------------------------------------
+@REM ------------------------------------------------
+@REM  Final testing report
+@REM ------------------------------------------------
 :DONE
-echo End %DATE% %TIME% >> %TY_RESULTS_FILE%
-echo =============================== >> %TY_RESULTS_FILE%
-IF NOT "%TY_RESULTS_BASE_DIR%" == "%FINALOUT%" (
-    IF EXIST %TY_RESULTS_BASE_DIR%\%FINALOUT% goto WARNING1
-    IF EXIST %TY_RESULTS_BASE_DIR%\%FINALOUT%.txt WARNING1
-    echo Setting %TY_RESULTS_BASE_DIR% to desired %FINALOUT%...
-    RENAME %TY_RESULTS_BASE_DIR% %FINALOUT%
-    RENAME %TY_RESULTS_FILE% %FINALOUT%.txt
-    set TY_RESULTS_FILE=%TY_RESULTS_BASE_DIR%\%FINALOUT%.txt
-    )
-echo.
-echo See %TY_RESULTS_FILE% file for list of tests done...
-echo And compare folders 'diff -u testbase %FINALOUT% ^> temp.diff'
-echo and check any differences carefully... If acceptable update 'testbase' accordingly...
-echo.
-goto END
-
-REM ------------------------------------------------
-REM  Messages and Exception Handlers
-REM ------------------------------------------------
-
-:ERR0
-echo ERROR: Can not locate 'testcases.txt' ... check name, and location ...
-goto END
-
-:ERR1
-echo ERROR: Can not locate %TY_TIDY_PATH% ... check name, and location ...
-goto END
-
-:ERR2
-echo ERROR: Can not create %TY_RESULTS_BASE_DIR% folder ... check name, and location ...
-goto END
-
-:ERR3
-echo ERROR: Can not locate 'onetest.bat' ... check name, and location ...
-goto END
-
-:ERR4
-echo ERROR: Can not locate 'input' folder ... check name, and location ...
-goto END
-
-:ERR5
-echo ERROR: You must define TY_TIDY_PATH, or specify the path as an argument ...
-goto END
-
-:WARNING1
-echo WARNING: You specified a directory name that already exists, so output
-echo will be in %TY_RESULTS_DIR% and %TY_RESULTS_FILE%.
-GOTO:EOF
+@echo Completed: %DATE% %TIME% >> "%TY_RESULTS_FILE%"
+@echo ==================================================== >> "%TY_RESULTS_FILE%"
+@echo.
+@echo See %TY_RESULTS_FILE% file for list of tests done.
+@echo.
+@echo If this is an output regression test, then also:
+@echo   Compare folders:
+@echo     - 'diff -u %TY_CASES_DIR% %TY_RESULTS_DIR% ^> temp.diff'
+@echo   Check any differences carefully:
+@echo     - if acceptable update '%TY_CASES_DIR%' accordingly.
+@echo.
+@goto END
 
 
-:USE
-echo  Usage of ALLTEST.BAT
-echo  AllTest [tidy.exe [Out_Folder]]
-echo  tidy.exe - This is the Tidy.exe you want to use for the test.
-echo  Out_Folder  - This is the FOLDER where you want the results put,
-echo  relative to the %TY_RESULTS_BASE_DIR% folder.
-echo  This folder will be created if it does not already exist.
-echo  These are both optional, but you must specify [tidy.exe] if you
-echo  wish to specify [Out_Folder].
-echo  ==================================
-echo  ALLTEST.BAT will run a battery of test files in the input folder
-echo  Each test name, has an expected result, given in its table.
-echo  There will be a warning if any test file fails to give this result.
-echo  ==================================
-echo  But the main purpose is to compare the 'results' of two version of
-echo  any two Tidy runtime exe's. Thus after you have two sets of results,
-echo  in separate folders, the idea is to compare these two folders.
-echo  Any directory compare utility will do, or you can download, and use
-echo  a WIN32 port of GNU diff.exe from http://unxutils.sourceforge.net/
-echo  ................................................................
-goto END
+@REM ------------------------------------------------
+@REM  Messages and Exception Handlers
+@REM ------------------------------------------------
+
+:HELP
+  @echo.
+  @echo  Usage:
+  @echo.
+  @echo    %0 [-t path/to/tidy.exe] [-o output_directory/] [-c case_set_name]
+  @echo.
+  @echo    You must use the -t argument to specify the path to the tidy that
+  @echo    you want to use for testing, unless you set TY_TIDY_PATH environment
+  @echo    variable.
+  @echo.
+  @echo    Override the default output folder using the -o argument. This folder
+  @echo    is relative to the %TY_RESULTS_BASE_DIR% 
+  @echo    folder. The output folder will be created if it does not already exist.
+  @echo    You can prevent automatic creation by setting TY_MKDIR_CONFIRM to
+  @echo    something (you will be given a chance to confirm, instead).
+  @echo.
+  @echo    You can use the -c argument to specify a different case set folder.
+  @echo    A case set is just a directory with a manifest and testing files
+  @echo    with appropriate filenames. The default case set folder is
+  @echo    %TY_CASES_DIR%. For example to run the XML test cases, you can
+  @echo    specify `-c xml`.
+  @echo.
+  @echo  %0 will run a battery of test files in the input folder. Each
+  @echo  test name has an expected result given in its manifest. A warning will
+  @echo  be produced if any test file fails to give this result.
+  @echo.
+  @echo  But the main purpose is to compare the 'results' of two version of
+  @echo  any two Tidy runtime exe's. Thus after you have two sets of results,
+  @echo  in separate folders, the idea is to compare these two folders.
+  @echo  Any directory compare utility will do, or you can download, and use
+  @echo  a WIN32 port of GNU diff.exe from http://unxutils.sourceforge.net/
+  @echo.
+@goto END
 
 :END

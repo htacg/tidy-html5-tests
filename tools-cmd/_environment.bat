@@ -25,6 +25,7 @@ IF "%1" == "" (
   exit /b
  )
 
+set TY_WANTS_HELP=
 set TY_ERRORS=0
 call %*
 exit /b
@@ -53,7 +54,11 @@ rem ###########################################################################
     set TY_CONFIG_DEFAULT=config_default.conf
     
     rem # The CLI cases set name, or the the default cases set name.
-    IF "%TY_CASES_SETNAME_CLI%" == "" set TY_CASES_SETNAME_CLI=testbase
+    set TY_CASES_SETNAME_DEFAULT=testbase
+    
+    rem # Supporting script filenames.
+    set TY_ONETEST=_onetest.bat
+    set TY_ONETESTA=_onetesta.bat
 
 GOTO:EOF
 
@@ -82,7 +87,11 @@ rem ###########################################################################
     set TY_WANTS_HELP=
     set TY_RESULTS_DIR_CLI=
     set TY_CASES_SETNAME_CLI=
-    
+    set TY_CASES_SETNAME_DEFAULT=
+
+    set TY_ONETEST=
+    set TY_ONETESTA=
+
     rem # TY_TIDY_PATH
     rem # TY_CASES_SETNAME
     
@@ -102,11 +111,10 @@ rem ###########################################################################
     set TY_PROJECT_ROOT_DIR=%CD%
     popd
     
-    rem # *Only* set TY_CASES_SETNAME if it's not already set! This allows
-    rem # setting it via an environment variable.
-    echo TY_CASES_SETNAME==%TY_CASES_SETNAME%
-    echo TY_CASES_SETNAME_CLI==%TY_CASES_SETNAME_CLI%
-    IF "%TY_CASES_SETNAME%" == "" set TY_CASES_SETNAME=%TY_CASES_SETNAME_CLI%
+    rem # TY_CASES_SETNAME - if set in the CLI, use it; otherwise use
+    rem # use the TY_CASES_SETNAME ENV; finally use the default.
+    IF NOT "%TY_CASES_SETNAME_CLI%" == "" set TY_CASES_SETNAME=%TY_CASES_SETNAME_CLI%
+    IF "%TY_CASES_SETNAME%" == "" set TY_CASES_SETNAME=%TY_CASES_SETNAME_DEFAULT%
 
     set TY_PROJECT_ROOT_DIR=%TY_PROJECT_ROOT_DIR%
     set TY_CASES_BASE_DIR=%TY_PROJECT_ROOT_DIR%\%TY_CASES_BASE_DIR%
@@ -127,6 +135,15 @@ rem ###########################################################################
     IF NOT "%TY_RESULTS_DIR_CLI%" == "" set TY_RESULTS_DIR=%TY_RESULTS_BASE_DIR%\%TY_RESULTS_DIR_CLI%-results
     IF NOT "%TY_RESULTS_DIR_CLI%" == "" set TY_RESULTS_FILE=%TY_RESULTS_BASE_DIR%\%TY_RESULTS_DIR_CLI%-results.txt
 
+    rem # cleanup in case we're not setlocal
+    set TY_CASES_SETNAME_CLI=
+    set TY_CASES_SETNAME_DEFAULT=
+    set proposed_argument=
+    set proposed_parameter=
+    
+    rem # Let's test the environment, too.
+    call :TEST_ENVIRONMENT
+    
 GOTO:EOF
 
 
@@ -156,10 +173,6 @@ rem ###########################################################################
     echo     TY_RESULTS_DIR_CLI = %TY_RESULTS_DIR_CLI%
     echo   TY_CASES_SETNAME_CLI = %TY_CASES_SETNAME_CLI%
     echo              TY_ERRORS = %TY_ERRORS%
-    echo           TY_INPUT_FMT =
-    echo          TY_CONFIG_FMT =
-    echo          TY_OUTPUT_FMT =
-    echo           TY_ERROR_FMT =
     echo       TY_MKDIR_CONFIRM = %TY_MKDIR_CONFIRM%
 
 GOTO:EOF
@@ -174,7 +187,7 @@ rem ###########################################################################
 
   rem # If there's nothing to process, then we're done.
   IF "%proposed_argument%" == "" GOTO :SET_ENVIRONMENT
-
+  
   rem # Treat help specially because it has many potential forms.
   IF "%proposed_argument%" == "-h" GOTO :SET_WANTS_HELP
   IF "%proposed_argument%" == "/h" GOTO :SET_WANTS_HELP
@@ -234,7 +247,7 @@ rem ###########################################################################
   IF NOT EXIST "%proposed_parameter%" GOTO :ERROR_NO_EXE
 
   "%proposed_parameter%" -v > NUL
-  if ERRORLEVEL 1 goto :ERROR_NOT_TIDY
+  IF ERRORLEVEL 1 goto :ERROR_NOT_TIDY
   
   set TY_TIDY_PATH=%proposed_parameter%
   
@@ -269,6 +282,85 @@ GOTO PROCESS_CLI
 
 
 rem ###########################################################################
+rem ## TEST_ENVIRONMENT
+rem ##   Pre-checks many of the items in the environment that testing scripts
+rem ##   will depend on. Failing checks will return from this script with an
+rem ##   error.
+rem ###########################################################################
+:TEST_ENVIRONMENT
+
+  rem # Ensure that the workhorse scripts are both present.
+  IF NOT EXIST "%TY_ONETEST%" call :ERROR_MISSING_FILE "%TY_ONETEST%"
+  IF NOT EXIST "%TY_ONETESTA%" call :ERROR_MISSING_FILE "%TY_ONETESTA%"
+
+  rem # Ensure that Tidy path leads to something and provides output.
+  rem # If specified in CLI it was already checked and this is redundant,
+  rem # however we still check because we may not have been set via CLI.
+  IF "%TY_TIDY_PATH%" == "" call :ERROR_NO_TIDY_PATH
+  IF NOT EXIST "%TY_TIDY_PATH%" call :ERROR_NO_EXE_ERROR
+  "%TY_TIDY_PATH%" -v > NUL
+  IF ERRORLEVEL 1 call :ERROR_NOT_TIDY_ERROR
+  
+  rem # Ensure that diff is installed and responsive.
+  diff -v > NUL
+  IF ERRORLEVEL 1 call :ERROR_DIFF_NOT_INSTALLED
+  
+  rem # Ensure that important directories exist
+  IF NOT EXIST "%TY_CASES_DIR%\" call :ERROR_DIR_NOT_EXIST "%TY_CASES_DIR%"
+  IF NOT EXIST "%TY_RESULTS_BASE_DIR%\" call :ERROR_OUTPUT_BASEDIR_NOT_EXIST
+  
+  rem # Don't do this if user only requested help. The other messages are
+  rem # diagnostic in nature and do help the user, but we shouldn't be
+  rem # potentially creating files.
+  IF NOT EXIST "%TY_RESULTS_DIR%" IF "%TY_WANTS_HELP%" == "" call :CREATE_RESULTS_DIR
+  
+  rem # Ensure the manifest file is present. This isn't needed by t1.bat
+  rem # because we already provide the expected output; however we'll check
+  rem # it anyway because it's probably not being used in isolation but as
+  rem # part of the greater test suite.
+  IF NOT EXIST %TY_EXPECTS_FILE% call :ERROR_MISSING_FILE "%TY_EXPECTS_FILE%"
+  
+  rem # Exit if there are errors; caller should check error status and act.
+  IF %TY_ERRORS% GTR 0 exit /b 1
+
+GOTO:EOF
+
+
+rem ###########################################################################
+rem ## CREATE_RESULTS_DIR
+rem ##   Checks the existence of the TY_RESULTS_DIR, and creates it if not
+rem ##   present. If TY_MKDIR_CONFIRM is set to any value in the environment,
+rem ##   then permission to create the directory will be requested before
+rem ##   creating the directory. Returns an error if directory is not created.
+rem ###########################################################################
+:CREATE_RESULTS_DIR
+
+  set result=y
+  set exists=true
+  IF NOT EXIST "%TY_RESULTS_DIR%" set exists=false
+  
+  rem # Get confirmation if TY_MKDIR_CONFIRM is set.
+  IF %exists% == false IF NOT "%TY_MKDIR_CONFIRM%" == "" echo The results output directory does not exist. Do you wish to create it now?
+  IF %exists% == false IF NOT "%TY_MKDIR_CONFIRM%" == "" set /p result=Create %TY_RESULTS_DIR% [Y]/N?
+  
+  rem # IF we have implicit or explicit permission to make the directory:
+  IF %exists% == false IF /i %result% == y echo Attempting to create %TY_RESULTS_DIR%...
+  IF %exists% == false IF /i %result% == y MKDIR %TY_RESULTS_DIR%
+  
+  rem # cleanup in case we're not setlocal
+  set result=
+  set exists=
+  
+  rem # If the directory doesn't exist now, something really went wrong.
+  IF NOT EXIST "%TY_RESULTS_DIR%" (
+    call :ERROR_OUTPUT_DIR_NOT_EXIST
+    exit /b 1
+  )  
+    
+GOTO:EOF
+
+
+rem ###########################################################################
 rem ## ERROR_BAD_ARGUMENT
 rem ##   Increments the TY_ERRORS count, but returns to the caller.
 rem ###########################################################################
@@ -298,14 +390,14 @@ GOTO:EOF
 
 
 rem ###########################################################################
-rem ## ERROR_NO_EXE
+rem ## ERROR_DIFF_NOT_INSTALLED
 rem ##   Increments the TY_ERRORS count, but returns to the caller.
 rem ###########################################################################
-:ERROR_NO_EXE
+:ERROR_DIFF_NOT_INSTALLED
   echo.
-  echo Tidy not Found Error
-  echo You must specify a valid, full path to a Tidy executable. Tidy was not
-  echo found at %proposed_parameter%.
+  echo diff not installed
+  echo diff is required for these tests but it's not responding. Is it in your
+  echo PATH? Is it installed?
   echo.
   rem # Let the calling script decide whether or not to abort.
   set /a TY_ERRORS=TY_ERRORS+1
@@ -313,17 +405,84 @@ GOTO:EOF
 
 
 rem ###########################################################################
-rem ## ERROR_NOT_TIDY
+rem ## ERROR_MISSING_FILE
+rem ##   Indicates that %1 is missing, and exits with an error.
+rem ###########################################################################
+:ERROR_MISSING_FILE
+  echo.
+  echo %1 not found
+  echo This file is required in order to conduct regression testing! Check the
+  echo name, location, etc.
+  echo.
+  exit /b 1
+GOTO:EOF
+
+
+rem ###########################################################################
+rem ## ERROR_NO_EXE / ERROR_NO_EXE_ERROR
+rem ##   Increments the TY_ERRORS count, but returns to the caller.
+rem ###########################################################################
+:ERROR_NO_EXE
+  call :ERROR_NO_EXE_ERROR %proposed_parameter%
+GOTO:EOF
+
+:ERROR_NO_EXE_ERROR
+  echo.
+  echo Tidy not Found Error
+  echo You must specify a valid, full path to a Tidy executable. Tidy was not
+  echo found at %1.
+  echo.
+  rem # Let the calling script decide whether or not to abort.
+  set /a TY_ERRORS=TY_ERRORS+1
+GOTO:EOF
+
+
+rem ###########################################################################
+rem ## ERROR_NO_TIDY_PATH
+rem ##   Increments the TY_ERRORS count, but returns to the caller.
+rem ###########################################################################
+:ERROR_NO_TIDY_PATH
+  echo.
+  echo TY_TIDY_PATH not set.
+  echo You must specify a valid, full path to a Tidy executable, either by
+  echo setting the TY_TIDY_PATH environment variable yourself, or by specifying
+  echo the path to Tidy using the `-t` argument.
+  echo.
+  rem # Let the calling script decide whether or not to abort.
+  set /a TY_ERRORS=TY_ERRORS+1
+GOTO:EOF
+
+
+rem ###########################################################################
+rem ## ERROR_NOT_TIDY / ERROR_NOT_TIDY_ERROR
 rem ##   Increments the TY_ERRORS count, but returns to the caller.
 rem ###########################################################################
 :ERROR_NOT_TIDY
+  call :ERROR_NOT_TIDY_ERROR %proposed_parameter%
+GOTO:EOF
+
+:ERROR_NOT_TIDY_ERROR
   echo.
   echo This Isn't Tidy Error
   echo The file you specified doesn't appear to be a valid Tidy. Specifically
   echo an error was returned when trying to check its version. Check the file
-  echo %proposed_parameter%.
+  echo %1.
   echo.
   rem # Let the calling script decide whether or not to abort.
+  set /a TY_ERRORS=TY_ERRORS+1
+GOTO:EOF
+
+
+rem ###########################################################################
+rem ## ERROR_DIR_NOT_EXIST
+rem ##   The directory doesn't exist, so increment TY_ERRORS count,
+rem ##   and return to the caller.
+rem ###########################################################################
+:ERROR_DIR_NOT_EXIST
+  echo.
+  echo %1
+  echo This directory doesn't exist but is required. Please check it.
+  echo.
   set /a TY_ERRORS=TY_ERRORS+1
 GOTO:EOF
 
@@ -343,36 +502,19 @@ GOTO:EOF
 
 
 rem ###########################################################################
-rem ## CREATE_RESULTS_DIR
-rem ##   Checks the existence of the TY_RESULTS_DIR, and creates it if not
-rem ##   present. If TY_MKDIR_CONFIRM is set to any value in the environment,
-rem ##   then permission to create the directory will be requested before
-rem ##   creating the directory. Returns an error if directory is not created.
+rem ## ERROR_OUTPUT_BASEDIR_NOT_EXIST
+rem ##   The output base directory doesn't exist, so increment TY_ERRORS count,
+rem ##   and return to the caller.
 rem ###########################################################################
-:CREATE_RESULTS_DIR
-
-  set result=y
-  set exists=true
-  IF NOT EXIST "%TY_RESULTS_DIR%" set exists=false
-  
-  rem # Get confirmation if TY_MKDIR_CONFIRM is set.
-  IF %exists%==false IF NOT %TY_MKDIR_CONFIRM% == "" echo The results output directory does not exist. Do you wish to create it now?
-  IF %exists%==false IF NOT %TY_MKDIR_CONFIRM% == "" set /p result=Create %TY_RESULTS_DIR% [Y]/N?
-  
-  rem # IF we have implicit or explicit permission to make the directory:
-  IF %exists%==false IF /i %result%==y echo Attempting to create %TY_RESULTS_DIR%...
-  IF %exists%==false IF /i %result%==y MKDIR %TY_RESULTS_DIR%
-  
-  rem # cleanup in case we're not setlocal
-  set result=
-  set exists=
-  
-  rem # If the directory doesn't exist now, something really went wrong.
-  IF NOT EXIST "%TY_RESULTS_DIR%" (
-    call :ERROR_OUTPUT_DIR_NOT_EXIST
-    exit /b 1
-  )  
-    
+:ERROR_OUTPUT_BASEDIR_NOT_EXIST
+  echo.
+  echo %TY_RESULTS_BASE_DIR%
+  echo This directory doesn't exist but is required. It's an integral part of
+  echo the testing suite and it's strange that doesn't exist. In any case, you
+  echo will have to create this directory yourself.
+  echo.
+  set /a TY_ERRORS=TY_ERRORS+1
 GOTO:EOF
+
 
 
