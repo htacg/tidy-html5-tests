@@ -40,7 +40,7 @@ set of case files).
   - Optional Tidy configuration files shall be named `case-nnn.conf`.
   - In the absense of a configuration file, the file `config_default.conf` in
     each directory will be used instead.
-  - `manifest.txt`, which consists of a table of test cases, expected
+  - `_manifest.txt`, which consists of a table of test cases, expected
     Tidy exit codes, and additional data (for some tests).
 
 - `setname-expects/`, which contains the expected output from HTML Tidy.
@@ -104,27 +104,3 @@ executable. This would produce an output in the `cases/` directory.
 
 For example, comparing `testbase-expects/` with `testbase-results`  
 will show you what file output was changed by your code modification, if any.
-In WIN32 there should be none.
-
-In Unix the `$ diff -ua cases-testbase-expects cases-testbase-results` will
-normally yield 3 changes: tests 431895, 500236 and 616606. 431895 is because it
-uses the `gnu-emacs: yes` option and we can thus expect the path separator in
-the file names to change.
-
-The other two 500236 and 616606 just seem to have some spaces changes. Not sure
-exactly why. If `-w` or `-b` option is use there should be no difference. So
-these 3 tests must be especially checked.
-
-Difficult, and tedious! Yes, but is a sure way to see if your changes adversely
-effected Tidy. Unfortunately, only such a visual comparison would show the
-results. If the output changes are fully acceptable, like a warning message
-changed, then this should become the new base file for that test.
-
-Of course some of the tests were to, say, avoid a segfault found. Other tests 
-were to visually compare the original input test file in a browser, with how the
-new output displayed in a browser. This is a purely VISUAL compare, and can not
-be done in code.
-
-And what about if there was NO current test existing to test what you were
-trying to fix. Well that means a NEW test should be added. Its output added to
-the base, then there would be a comparison.
