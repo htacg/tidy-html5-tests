@@ -49,6 +49,12 @@ rem ##   You should not call this function; it's used internally only.
 rem ###########################################################################
 :PRESET_ENVIRONMENT
 
+    rem # set a default relative path if none given
+    if "%TY_TIDY_PATH%x" == "x" (
+        rem # Relative path to a normal tidy windows build
+        set TY_TIDY_PATH=..\..\tidy-html5\build\cmake\release\tidy.exe
+    )
+
     rem # Relative path from this script to the top-level tidy-html5-tests directory.
     set TY_PROJECT_ROOT_DIR=..
 
@@ -56,8 +62,8 @@ rem ###########################################################################
     set TY_CASES_BASE_DIR=cases
     set TY_RESULTS_BASE_DIR=cases
 
-    rem # These are relative to the TY_CASES_BASE_DIR directory.
-    set TY_TMP_DIR=_tmp
+    rem # Use 'standard windows TEMP directory, rather than creating a new one!
+    set TY_TMP_DIR=%TEMP%
 
     rem # These are expected to be in cases_base_dir directory.
     set TY_VERSION_FILE=_version.txt
@@ -118,10 +124,10 @@ rem ###########################################################################
 
     call :preset_environment
 
-    rem # We'll use this to get the full, absolute path.
-    pushd %TY_PROJECT_ROOT_DIR%
-    set TY_PROJECT_ROOT_DIR=%CD%
-    popd
+    rem # Uncomment if you want the full, absolute path.
+    rem pushd %TY_PROJECT_ROOT_DIR%
+    rem set TY_PROJECT_ROOT_DIR=%CD%
+    rem popd
     
     rem # TY_CASES_SETNAME - if set in the CLI, use it; otherwise use
     rem # use the TY_CASES_SETNAME ENV; finally use the default.
@@ -136,7 +142,7 @@ rem ###########################################################################
     set TY_CONFIG_DEFAULT=%TY_CASES_DIR%\%TY_CONFIG_DEFAULT%
     set TY_VERSION_FILE=%TY_CASES_BASE_DIR%\%TY_VERSION_FILE%
     set TY_RESULTS_BASE_DIR=%TY_PROJECT_ROOT_DIR%\%TY_RESULTS_BASE_DIR%
-    set TY_TMP_DIR=%TY_RESULTS_BASE_DIR%\%TY_TMP_DIR%
+    rem # set TY_TMP_DIR=%TY_RESULTS_BASE_DIR%\%TY_TMP_DIR%
     set TY_TMP_FILE=%TY_TMP_DIR%\temp.txt
 
     rem # Set the default output directory and file...
@@ -256,7 +262,7 @@ rem ##   Test and then set the Tidy path.
 rem ###########################################################################
 :SET_TIDY_PATH
 
-  IF NOT EXIST "%proposed_parameter%" GOTO :ERROR_NO_EXE
+  rem IF NOT EXIST "%proposed_parameter%" GOTO :ERROR_NO_EXE
 
   "%proposed_parameter%" -v > NUL
   IF ERRORLEVEL 1 goto :ERROR_NOT_TIDY
@@ -309,7 +315,7 @@ rem ###########################################################################
   rem # If specified in CLI it was already checked and this is redundant,
   rem # however we still check because we may not have been set via CLI.
   IF "%TY_TIDY_PATH%" == "" call :ERROR_NO_TIDY_PATH
-  IF NOT EXIST "%TY_TIDY_PATH%" call :ERROR_NO_EXE_ERROR
+  rem # IF NOT EXIST "%TY_TIDY_PATH%" call :ERROR_NO_EXE_ERROR
   "%TY_TIDY_PATH%" -v > NUL
   IF ERRORLEVEL 1 call :ERROR_NOT_TIDY_ERROR
   

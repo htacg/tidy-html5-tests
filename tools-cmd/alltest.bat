@@ -78,12 +78,29 @@ echo.
 @echo ==================================================== >> "%TY_RESULTS_FILE%"
 @echo.
 @echo See %TY_RESULTS_FILE% file for list of tests done.
+@if /i "%TY_CASES_SETNAME%" == "access" goto END
 @echo.
+@diff -v > NUL
+@if ERRORLEVEL 1 goto NODIFF
+@echo Doing: 'diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR%'
+@echo Doing: 'diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR%' >> "%TY_RESULTS_FILE%"
+@diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR% >> "%TY_RESULTS_FILE%"
+@if ERRORLEVEL 1 goto DNDIFF
+@echo Appears a successful compare of folders...
+@goto END
+
+:NODIFF
 @echo If this is an output regression test, then also:
 @echo   Compare folders:
-@echo     - 'diff -u %TY_CASES_DIR% %TY_RESULTS_DIR% ^> temp.diff'
+@echo   Get the WIN32 port of GNU diff.exe from http://unxutils.sourceforge.net/
+@echo   and use -
+@echo     - 'diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR%'
+@echo.
+@echo   Or use any other folder compare utility you have
+@echo.
+:DNDIFF
 @echo   Check any differences carefully:
-@echo     - if acceptable update '%TY_CASES_DIR%' accordingly.
+@echo     - if acceptable update '%TY_EXPECTS_DIR%' accordingly.
 @echo.
 @goto END
 

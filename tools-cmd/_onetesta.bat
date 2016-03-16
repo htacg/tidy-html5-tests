@@ -1,5 +1,5 @@
 @echo off
-@setlocal
+@REM Can NOT setlocal in here!
 
 @REM #======================================================================
 @REM # _onetesta.bat - execute a single accessibility test case
