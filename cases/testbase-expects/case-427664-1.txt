@@ -1,18 +1,11 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
-line 5 column 8 - Warning: replacing invalid character code 135
-line 5 column 1 - Warning: <body> attribute name "￿￿￿￿￿1/2" (value="xx") is invalid
+line 5 column 1 - Warning: <body> attribute name "Ç1/2" (value="xx") is invalid
 line 5 column 1 - Warning: <body> unexpected or duplicate quote mark
 line 5 column 1 - Warning: <body> unexpected or duplicate quote mark
 line 5 column 1 - Warning: <body> attribute "width" has invalid value "align="""
 line 5 column 1 - Warning: <body> proprietary attribute "width"
 Info: Document content looks like HTML5
-Tidy found 7 warnings and 0 errors!
-
-Character codes 128 to 159 (U+0080 to U+009F) are not allowed in HTML;
-even if they were, they would likely be unprintable control characters.
-Tidy assumed you wanted to refer to a character with the same byte value in the 
-specified encoding and replaced that reference with the Unicode 
-equivalent.
+Tidy found 6 warnings and 0 errors!
 
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues

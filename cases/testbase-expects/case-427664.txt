@@ -1,5 +1,5 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
-line 5 column 1 - Warning: <body> attribute name "￿￿1/2" (value="xx") is invalid
+line 5 column 1 - Warning: <body> attribute name "Ã1/2" (value="xx") is invalid
 line 5 column 1 - Warning: <body> unexpected or duplicate quote mark
 line 5 column 1 - Warning: <body> unexpected or duplicate quote mark
 line 5 column 1 - Warning: <body> attribute "width" has invalid value "align="""
