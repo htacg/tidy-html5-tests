@@ -76,8 +76,8 @@ shift
 shift
 
 # Execute the test
-echo "Doing: '${TY_TIDY_PATH} -f $MSGFILE -config $CFGFILE "$@" --tidy-mark no -o $TIDYFILE $INFILE'" >> "${TY_TMP_FILE}"
-${TY_TIDY_PATH} -f $MSGFILE -config $CFGFILE "$@" --tidy-mark no -o $TIDYFILE $INFILE
+echo "Doing: '${TY_TIDY_PATH} -lang en_us -f $MSGFILE -config $CFGFILE "$@" --tidy-mark no -o $TIDYFILE $INFILE'" >> "${TY_TMP_FILE}"
+${TY_TIDY_PATH} -lang en_us -f $MSGFILE -config $CFGFILE "$@" --tidy-mark no -o $TIDYFILE $INFILE
 STATUS=$?
 
 if [ $STATUS -ne $EXPECTED ]
@@ -92,4 +92,6 @@ then
 fi
 
 exit 0
+
+# eof
 
