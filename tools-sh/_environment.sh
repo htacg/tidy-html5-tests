@@ -65,11 +65,11 @@ unset_environment()
 
 set_environment()
 {
-    # We'll use this to get the full, absolute path.
-    cwd=`pwd`
-    cd "${project_root_dir}"
-    project_root_dir="`pwd`"
-    cd "${cwd}"
+    # Uncomment this to get the full, absolute path, if desired.
+    # cwd=`pwd`
+    # cd "${project_root_dir}"
+    # project_root_dir="`pwd`"
+    # cd "${cwd}"
     
     # *Only* set TY_CASES_SETNAME if it's not already set!
     if [ -z "$TY_CASES_SETNAME" ]; then
@@ -240,3 +240,5 @@ test_tidy_path()
 # Because we're sourced, we can setup other convenience variables here, too.
 BN="`basename $0`"
 ERROR_COUNT=0
+# eof
+
