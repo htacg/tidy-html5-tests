@@ -1,10 +1,11 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
 line 10 column 1 - Warning: discarding unexpected <noframes>
 line 11 column 3 - Warning: discarding unexpected <body>
-line 13 column 3 - Warning: <frame> isn't allowed in <body> elements
-line 10 column 1 - Info: <body> previously mentioned
+line 10 column 1 - Warning: content occurs after end of body
+line 15 column 1 - Warning: discarding unexpected </noframes>
+line 13 column 3 - Warning: <frame> element removed from HTML5
 Info: Document content looks like HTML5
-Tidy found 4 warnings and 0 errors!
+Tidy found 6 warnings and 0 errors!
 
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues

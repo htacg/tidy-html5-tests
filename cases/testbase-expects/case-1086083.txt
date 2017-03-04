@@ -1,15 +1,9 @@
 line 11 column 1 - Warning: inserting implicit <ul>
 line 11 column 1 - Warning: missing </ul> before </td>
-line 16 column 1 - Warning: <li> isn't allowed in <body> elements
-line 6 column 1 - Info: <body> previously mentioned
-line 16 column 1 - Warning: inserting implicit <ul>
-line 18 column 1 - Warning: discarding unexpected </body>
-line 19 column 1 - Warning: discarding unexpected </html>
-line 16 column 1 - Warning: missing </ul>
 Info: Doctype given is "-//W3C//DTD HTML 4.01//EN"
 Info: Document content looks like HTML 4.01 Strict
 Info: No system identifier in emitted doctype
-Tidy found 7 warnings and 0 errors!
+Tidy found 2 warnings and 0 errors!
 
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues

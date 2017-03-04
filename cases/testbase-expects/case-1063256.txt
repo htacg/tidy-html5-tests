@@ -2,8 +2,6 @@ line 1 column 1 - Warning: missing <!DOCTYPE> declaration
 line 4 column 1 - Warning: discarding unexpected <frame>
 line 5 column 1 - Error: <overlay> is not recognized!
 line 5 column 1 - Warning: discarding unexpected <overlay>
-line 6 column 1 - Warning: <bgsound> isn't allowed in <body> elements
-line 6 column 1 - Info: <body> previously mentioned
 line 9 column 1 - Warning: <spacer> isn't allowed in <tr> elements
 line 8 column 1 - Info: <tr> previously mentioned
 line 5 column 1 - Warning: missing </noframes>
@@ -11,10 +9,10 @@ line 1 column 1 - Warning: inserting missing 'title' element
 line 8 column 1 - Warning: trimming empty <tr>
 line 2 column 1 - Warning: <frameset> element removed from HTML5
 line 5 column 1 - Warning: <noframes> element removed from HTML5
-line 6 column 1 - Warning: <bgsound> is not approved by W3C
 line 9 column 1 - Warning: <spacer> is not approved by W3C
+line 6 column 1 - Warning: <bgsound> is not approved by W3C
 Info: Document content looks like HTML5
-Tidy found 12 warnings and 1 error!
+Tidy found 11 warnings and 1 error!
 
 This document has errors that must be fixed before
 using HTML Tidy to generate a tidied up version.

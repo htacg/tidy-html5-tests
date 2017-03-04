@@ -5,13 +5,13 @@ line 18 column 1 - Warning: inserting implicit <strong>
 line 18 column 1 - Warning: missing </strong> before <center>
 line 20 column 9 - Warning: inserting implicit <strong>
 line 20 column 9 - Warning: missing </strong> before <h1>
-line 23 column 1 - Warning: inserting implicit <strong>
+line 22 column 5 - Warning: inserting implicit <strong>
 line 25 column 96 - Warning: unescaped & or unknown entity "&body"
-line 23 column 1 - Warning: replacing unexpected font with </font>
+line 22 column 5 - Warning: replacing unexpected font with </font>
 line 66 column 104 - Warning: unescaped & or unknown entity "&city"
 line 66 column 5 - Warning: missing </strong> before <h2>
 line 66 column 1 - Warning: missing </h3> before <h2>
-line 74 column 1 - Warning: inserting implicit <strong>
+line 73 column 5 - Warning: inserting implicit <strong>
 line 74 column 263 - Warning: unescaped & or unknown entity "&body"
 line 102 column 257 - Warning: unescaped & or unknown entity "&body"
 line 106 column 254 - Warning: unescaped & or unknown entity "&body"

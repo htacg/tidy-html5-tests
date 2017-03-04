@@ -1,8 +1,7 @@
-line 13 column 3 - Warning: missing <li>
 Info: Doctype given is "-//W3C//DTD HTML 4.01//EN"
 Info: Document content looks like HTML 4.01 Strict
 Info: No system identifier in emitted doctype
-Tidy found 1 warning and 0 errors!
+No warnings or errors were found.
 
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues

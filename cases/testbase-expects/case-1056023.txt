@@ -1,15 +1,10 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
 line 1 column 1 - Warning: inserting implicit <body>
-line 1 column 1 - Warning: <tfoot> isn't allowed in <body> elements
-line 1 column 1 - Info: <body> previously mentioned
-line 1 column 1 - Warning: inserting implicit <table>
 line 2 column 1 - Warning: discarding unexpected </tbody>
-line 1 column 1 - Warning: missing </table>
 line 1 column 1 - Warning: inserting missing 'title' element
 line 1 column 1 - Warning: trimming empty <tfoot>
-line 1 column 1 - Warning: trimming empty <table>
 Info: Document content looks like HTML5
-Tidy found 9 warnings and 0 errors!
+Tidy found 5 warnings and 0 errors!
 
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues

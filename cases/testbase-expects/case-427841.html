@@ -2,9 +2,6 @@
 <html>
 <head>
   <title>Test input for bug #427841</title>
-  <style type="text/css">
-  div.c1 {margin-left: 2em}
-  </style>
 </head>
 <body>
   <p>Tidy crashes on badly formed HTML involving nested lists.</p>
@@ -22,7 +19,7 @@
   <ul>
     <li>Merge adjacent lists</li>
   </ul>
-  <div class="c1">
+  <ul>
     <ul>
       <li>
         <a href="one.html">One</a>
@@ -34,6 +31,6 @@
         <a href="three.html">Three</a>
       </li>
     </ul>
-  </div>
+  </ul>
 </body>
 </html>
