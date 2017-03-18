@@ -104,3 +104,24 @@ executable. This would produce an output in the `cases/` directory.
 
 For example, comparing `testbase-expects/` with `testbase-results`  
 will show you what file output was changed by your code modification, if any.
+
+If those changes result in an **improvement** of tidy/libtidy, then the **new**
+`expects` should be fully updated to reflect the particular version-TAG... 
+
+This process needs some review... ideas welcome.. thanks...
+
+In general, it is hoped, that normally the output would not change, despite 
+many bumps in the tidy build version, before it is required to make a **new** 
+`expects` tag/branch created here...
+
+The `master` branch should 100% reflects the `htacg` **master** branch... 
+ie, last official release... there could be a dev branch `next`, to further 
+mirror the **parent**, Tidy...
+
+Various other `branch` names, could reflect that version, especially during 
+periods of lots of message changes, which here can be difficult...
+
+Whatever is chosen, devs can create specific `branches` here, yet another 
+way to provide quick, full, easy, regression testing... thanks...
+
+; eof
