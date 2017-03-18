@@ -20,7 +20,7 @@
 @REM ------------------------------------------------
 @if "%~1x" == "x" goto :HELP
 @if "%~2x" == "x" goto :HELP
-@echo %~1| findstr /r ^[1-9][0-9]*$ > nul
+@echo %~1| findstr /r ^[1-9][0-9].*$ > nul
 @if ERRORLEVEL 1 goto :HELP
 @echo %~2| findstr /r ^[0-2]$ > nul
 @if ERRORLEVEL 1 goto :HELP
