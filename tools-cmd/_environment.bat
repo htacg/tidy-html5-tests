@@ -483,8 +483,8 @@ GOTO:EOF
   echo.
   echo This Isn't Tidy Error
   echo The file you specified doesn't appear to be a valid Tidy. Specifically
-  echo an error was returned when trying to check its version. Check the file
-  echo %1.
+  echo an error was returned when trying to check its version. Check the file '%1',
+  echo or '%TY_TIDY_PATH% -v' failed. Use -t to set tidy.
   echo.
   rem # Let the calling script decide whether or not to abort.
   set /a TY_ERRORS=TY_ERRORS+1
