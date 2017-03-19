@@ -78,7 +78,7 @@ echo.
 @echo ==================================================== >> "%TY_RESULTS_FILE%"
 @echo.
 @echo See %TY_RESULTS_FILE% file for list of tests done.
-@if /i "%TY_CASES_SETNAME%" == "access" goto END
+@REM if /i "%TY_CASES_SETNAME%" == "access" goto END
 @echo.
 @diff -v > NUL
 @if ERRORLEVEL 1 goto NODIFF
@@ -86,7 +86,9 @@ echo.
 @echo Doing: 'diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR%' >> "%TY_RESULTS_FILE%"
 @diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR% >> "%TY_RESULTS_FILE%"
 @if ERRORLEVEL 1 goto DNDIFF
-@echo Appears a successful compare of folders...
+@echo.
+@echo Appears a successful compare of folders... no output changes detected...
+@echo.
 @goto END
 
 :NODIFF
@@ -97,9 +99,9 @@ echo.
 @echo     - 'diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR%'
 @echo.
 @echo   Or use any other folder compare utility you have
-@echo.
 :DNDIFF
-@echo   Check any differences carefully:
+@echo.
+@echo   Check the differences carefully:
 @echo     - if acceptable update '%TY_EXPECTS_DIR%' accordingly.
 @echo.
 @goto END
