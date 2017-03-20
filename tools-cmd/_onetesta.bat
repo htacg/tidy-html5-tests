@@ -68,10 +68,10 @@ REM ------------------------------------------------
 @if exist "%MSGFILE%"  del "%MSGFILE%"
 @if exist "%TIDYFILE%" del "%TIDYFILE%"
 
-@echo Doing: %TY_TIDY_PATH% -f %MSGFILE% --accessibility-check %ACCESSLEVEL% -config %CFGFILE% --gnu-emacs yes --tidy-mark no -o %TIDYFILE% %INFILE% >> "%TY_RESULTS_FILE%"
+@echo Doing: %TY_TIDY_PATH% -f %MSGFILE% --accessibility-check %ACCESSLEVEL% -config %CFGFILE% --show-info no --tidy-mark no -o %TIDYFILE% %INFILE% >> "%TY_RESULTS_FILE%"
 
 @REM this has to all one line.
-@"%TY_TIDY_PATH%" -f "%MSGFILE%" --accessibility-check %ACCESSLEVEL% -config "%CFGFILE%" --gnu-emacs yes --tidy-mark no -o "%TIDYFILE%" "%INFILE%"
+@"%TY_TIDY_PATH%" -f "%MSGFILE%" --accessibility-check %ACCESSLEVEL% -config "%CFGFILE%" --show-info no --tidy-mark no -o "%TIDYFILE%" "%INFILE%"
 
 @REM Create temp directory if necessary.
 @if NOT EXIST "%TY_TMP_DIR%\" md "%TY_TMP_DIR%"
