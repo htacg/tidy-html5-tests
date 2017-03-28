@@ -9,10 +9,9 @@ line 6 column 30 - Warning: trimming empty <font>
 Info: Document content looks like HTML5
 Tidy found 8 warnings and 0 errors!
 
-You are recommended to use CSS to specify the font and
-properties such as its size and color. This will reduce
-the size of HTML files and make them easier to maintain
-compared with using <FONT> elements.
+You are recommended to use CSS to specify the font and properties such as its
+size and color. This will reduce the size of HTML files and make them easier to
+maintain compared with using <FONT> elements.
 
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues
@@ -21,6 +20,6 @@ Latest HTML specification: http://dev.w3.org/html5/spec-author-view/
 Validate your HTML documents: http://validator.w3.org/nu/
 Lobby your company to join the W3C: http://www.w3.org/Consortium
 
-Do you speak a language other than English, or a different variant of 
-English? Consider helping us to localize HTML Tidy. For details please see 
+Do you speak a language other than English, or a different variant of English?
+Consider helping us to localize HTML Tidy. For details please see
 https://github.com/htacg/tidy-html5/blob/master/README/LOCALIZE.md
