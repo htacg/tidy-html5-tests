@@ -15,8 +15,10 @@ if [ ! -z "$1" ]; then
     export TY_TIDY_PATH="$1"
 fi
 
+DIR="$(readlink -e $(dirname $0))"
+
 # setup the ENVIRONMENT
-source "_environment.sh"
+source "${DIR}/_environment.sh"
 set_environment
 
 # check critical inputs
@@ -26,25 +28,26 @@ test_tidy_path || exit 1
 
 TMPNOW=`d_now`
 TMPINP="${TY_EXPECTS_FILE}"
+TESTONE="${DIR}/testone.sh"
 
-test_file_general "testone.sh" || exit 1
-test_file_general "$TMPINP" || exit 1
+test_file_general "${TESTONE}" || exit 1
+test_file_general "${TMPINP}" || exit 1
 
 
 # count the tests
 TMPCNT=0
 while read bugNo expected
 do
-    TMPCNT=`expr $TMPCNT + 1`
-done < $TMPINP
+    TMPCNT=`expr ${TMPCNT} + 1`
+done < ${TMPINP}
 
 # output a header
 if [ -f "${TY_RESULTS_FILE}" ]; then
 	rm -f ${TY_RESULTS_FILE}
 fi
-echo "$BN: Will process $TMPCNT tests from $TMPINP on $TMPNOW"
-echo "$BN: Will process $TMPCNT tests from $TMPINP on $TMPNOW" > "${TY_RESULTS_FILE}"
-echo "$BN: Tidy version in use..." >> "${TY_RESULTS_FILE}"
+echo "${BN}: Will process ${TMPCNT} tests from ${TMPINP} on ${TMPNOW}"
+echo "${BN}: Will process ${TMPCNT} tests from ${TMPINP} on ${TMPNOW}" > "${TY_RESULTS_FILE}"
+echo "${BN}: Tidy version in use..." >> "${TY_RESULTS_FILE}"
 version=$(report_tidy_version) || exit 1
 echo ${version} >> "${TY_RESULTS_FILE}"
 version=$(report_testbase_version)
@@ -56,14 +59,13 @@ echo "========================================" >> "${TY_RESULTS_FILE}"
 while read bugNo expected
 do
 #  echo Testing $bugNo | tee -a "${TY_RESULTS_FILE}"
-  ./testone.sh $bugNo $expected | tee -a "${TY_RESULTS_FILE}"
-done < $TMPINP
+  "${TESTONE}" $bugNo $expected | tee -a "${TY_RESULTS_FILE}"
+done < ${TMPINP}
 echo "========================================" >> "${TY_RESULTS_FILE}"
 
-echo "$BN: Done $TMPCNT tests..." >> "${TY_RESULTS_FILE}"
+echo "${BN}: Done ${TMPCNT} tests..." >> "${TY_RESULTS_FILE}"
 echo "# eof"
-echo "$BN: Done $TMPCNT tests - see ${TY_RESULTS_FILE}"
+echo "${BN}: Done ${TMPCNT} tests - see ${TY_RESULTS_FILE}"
 
 
 # eof
-

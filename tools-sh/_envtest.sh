@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-source _environment.sh
+DIR="$(readlink -e $(dirname $0))"
+source "${DIR}/_environment.sh"
 
 set_environment
 
@@ -14,4 +15,4 @@ test_results_base_dir
 
 version=$(report_tidy_version)
 
-echo $version
+echo "${version}"

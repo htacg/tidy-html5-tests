@@ -18,15 +18,17 @@ if [ "$#" -ne 2 ]; then
     exit
 fi
 
+DIR="$(readlink -e $(dirname $0))"
+
 # setup the ENVIRONMENT
-source "_environment.sh"
+source "${DIR}/_environment.sh"
 set_environment
 
 # check critical inputs
 test_results_base_dir || exit 1
 test_tidy_path || exit 1
 
-echo Testing $1
+echo "Testing $1"
 set +f # ensure wildcard expansion is on
 
 TESTNO=$1
@@ -39,24 +41,24 @@ TIDYFILE="${TY_RESULTS_DIR}/case-${TESTNO}.html"
 MSGFILE="${TY_RESULTS_DIR}/case-${TESTNO}.txt"
 
 # Remove any pre-exising test outputs
-for INFIL in $MSGFILE $TIDYFILE
+for INFIL in "${MSGFILE}" "${TIDYFILE}"
 do
-  if [ -f $INFIL ]
+  if [ -f "${INFIL}" ]
   then
-    rm $INFIL
+    rm "${INFIL}"
   fi
 done
 
-for INFILE in $INFILES
+for INFILE in ${INFILES}
 do
-    if [ -r $INFILE ]
+    if [ -r "${INFILE}" ]
     then
       break
     fi
 done
 
 # If no test specific config file, use default.
-if [ ! -f $CFGFILE ]
+if [ ! -f "${CFGFILE}" ]
 then
   CFGFILE="${TY_CONFIG_DEFAULT}"
 fi
@@ -76,22 +78,21 @@ shift
 shift
 
 # Execute the test
-echo "Doing: '${TY_TIDY_PATH} -lang en_us -f $MSGFILE -config $CFGFILE "$@" --tidy-mark no -o $TIDYFILE $INFILE'" >> "${TY_TMP_FILE}"
-${TY_TIDY_PATH} -lang en_us -f $MSGFILE -config $CFGFILE "$@" --tidy-mark no -o $TIDYFILE $INFILE
+echo "Doing: '${TY_TIDY_PATH} -lang en_us -f ${MSGFILE} -config ${CFGFILE} "$@" --tidy-mark no -o ${TIDYFILE} ${INFILE}'" >> "${TY_TMP_FILE}"
+"${TY_TIDY_PATH}" -lang en_us -f "${MSGFILE}" -config "${CFGFILE}" "$@" --tidy-mark no -o "${TIDYFILE}" "${INFILE}"
 STATUS=$?
 
-if [ $STATUS -ne $EXPECTED ]
+if [ "${STATUS}" -ne "${EXPECTED}" ]
 then
-  echo "== $TESTNO failed (Status received: $STATUS vs expected: $EXPECTED)"
+  echo "== ${TESTNO} failed (Status received: ${STATUS} vs expected: ${EXPECTED})"
   echo ""
-  cat $MSGFILE
-  echo "== $TESTNO failed (Status received: $STATUS vs expected: $EXPECTED)" >> "${TY_TMP_FILE}"
+  cat "${MSGFILE}"
+  echo "== ${TESTNO} failed (Status received: ${STATUS} vs expected: ${EXPECTED})" >> "${TY_TMP_FILE}"
   echo ""
-  cat $MSGFILE >> "${TY_TMP_FILE}"
+  cat "${MSGFILE}" >> "${TY_TMP_FILE}"
   exit 1
 fi
 
 exit 0
 
 # eof
-
