@@ -15,23 +15,25 @@ if [ "$#" -ne 3 ]; then
     exit
 fi
 
+DIR="$(readlink -e $(dirname $0))"
+
 # setup the ENVIRONMENT
-source "_environment.sh"
+source "${DIR}/_environment.sh"
 set_environment
 
 # check critical inputs
 test_results_base_dir || exit 1
 test_tidy_path || exit 1
 
-VERSION='$Id'
+VERSION='${Id}'
 
-echo Testing $1
+echo "Testing $1"
 
 set +f
 
-TESTNO=$1
-TESTEXPECTED=$2
-ACCESSLEVEL=$3
+TESTNO="$1"
+TESTEXPECTED="$2"
+ACCESSLEVEL="$3"
 
 INFILES="${TY_CASES_DIR}/case-$1.*ml"
 CFGFILE="${TY_CASES_DIR}/case-$1.conf"
@@ -46,24 +48,24 @@ shift
 shift
 
 # Remove any pre-exising test outputs
-for INFIL in $MSGFILE $TIDYFILE
+for INFIL in "${MSGFILE}" "${TIDYFILE}"
 do
-  if [ -f $INFIL ]
+  if [ -f "${INFIL}" ]
   then
-    rm $INFIL
+    rm "${INFIL}"
   fi
 done
 
-for INFILE in $INFILES
+for INFILE in ${INFILES}
 do
-    if [ -r $INFILE ]
+    if [ -r "${INFILE}" ]
     then
       break
     fi
 done
 
 # If no test specific config file, use default.
-if [ ! -f $CFGFILE ]
+if [ ! -f "${CFGFILE}" ]
 then
   CFGFILE="${TY_CONFIG_DEFAULT}"
 fi
@@ -74,15 +76,14 @@ if [ ! -d "${TY_RESULTS_DIR}" ]; then
 fi
 
 # Perform the testing
-${TY_TIDY_PATH} -f $MSGFILE --accessibility-check $ACCESSLEVEL -config $CFGFILE "$@" --gnu-emacs yes --tidy-mark no -o $TIDYFILE $INFILE
+"${TY_TIDY_PATH}" -f "${MSGFILE}" --accessibility-check "${ACCESSLEVEL}" -config "${CFGFILE}" "$@" --gnu-emacs yes --tidy-mark no -o "${TIDYFILE}" "${INFILE}"
 STATUS=$?
 
-if [ `grep -c -e ' \['$TESTEXPECTED'\]: ' $MSGFILE` = 0 ]
+if [ `grep -c -e ' \['${TESTEXPECTED}'\]: ' "${MSGFILE}"` = 0 ]
 then
-  echo "--- test '$TESTEXPECTED' not detected in file '$INFILE'"
-  cat $MSGFILE
+  echo "--- test '${TESTEXPECTED}' not detected in file '${INFILE}'"
+  cat "${MSGFILE}"
   exit 1
 fi
 
 exit 0
-
