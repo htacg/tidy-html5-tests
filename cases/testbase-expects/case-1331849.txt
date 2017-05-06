@@ -1,9 +1,12 @@
-line 25 column 1 - Warning: discarding unexpected </table>
+line 9 column 1 - Warning: <tr> isn't allowed in <body> elements
+line 6 column 1 - Info: <body> previously mentioned
+line 9 column 1 - Warning: inserting implicit <table>
+line 9 column 1 - Warning: <table> lacks "summary" attribute
 line 29 column 1 - Warning: <table> lacks "summary" attribute
 Info: Doctype given is "-//W3C//DTD HTML 4.0 Transitional//EN"
 Info: Document content looks like HTML 4.01 Transitional
 Info: No system identifier in emitted doctype
-Tidy found 2 warnings and 0 errors!
+Tidy found 4 warnings and 0 errors!
 
 The table summary attribute should be used to describe
 the table structure. It is very helpful for people using
