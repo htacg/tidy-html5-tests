@@ -1,8 +1,9 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
 line 6 column 1 - Warning: <a> attribute with missing trailing quote mark
 line 6 column 1 - Warning: <a> escaping malformed URI reference
+line 6 column 1 - Warning: <a> illegal characters found in URI
 Info: Document content looks like HTML5
-Tidy found 3 warnings and 0 errors!
+Tidy found 4 warnings and 0 errors!
 
 URIs must be properly escaped, they must not contain unescaped
 characters below U+0021 including the space character and not

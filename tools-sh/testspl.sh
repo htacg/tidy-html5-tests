@@ -11,22 +11,18 @@
 
 # Allow user-supplied Tidy via command line. Note that setting
 # the TY_TIDY_PATH environment variable is a valid alternative.
-if [ -z "${TY_TIDY_PATH}" ]; then
-    if [ -z "$1" ]; then
-        export TY_TIDY_PATH="../../tidy-html5/build/cmake/tidy"
-    else
-        export TY_TIDY_PATH="$1"
-    fi
+if [ -z "$1" ]; then
+    export TY_TIDY_PATH="../../tidy-html5/build/cmake/tidy"
+else
+    export TY_TIDY_PATH="$1"
 fi
 
 # Change our set name for this test.
-original_set="${TY_CASES_SETNAME}"
+original_set="$TY_CASES_SETNAME"
 export TY_CASES_SETNAME="special"
 
-DIR="$(readlink -e $(dirname $0))"
-
 # setup the ENVIRONMENT
-source "${DIR}/_environment.sh"
+source "_environment.sh"
 set_environment
 # report_environment
 
@@ -34,32 +30,33 @@ set_environment
 test_results_base_dir || exit 1
 test_tidy_path || exit 1
 
-if [ -f "${TY_RESULTS_FILE}" ]; then
-    rm -fv ${TY_RESULTS_FILE}
+if [ -f "$TY_RESULTS_FILE" ]; then
+    rm -fv $TY_RESULTS_FILE
 fi
 
 while read bugNo expected
 do
-  # echo "Testing ${bugNo} ${expected}"
-  "${DIR}/testone.sh" "${bugNo}" "${expected}" | tee -a "${TY_RESULTS_FILE}"
+  # echo "Testing $bugNo $expected"
+  ./testone.sh "$bugNo" "$expected" | tee -a "${TY_RESULTS_FILE}"
 done < "${TY_EXPECTS_FILE}"
 
-echo "${BN}: Running 'diff -ua ${TY_EXPECTS_DIR} ${TY_RESULTS_DIR}'"
-echo "${BN}: Running 'diff -ua ${TY_EXPECTS_DIR} ${TY_RESULTS_DIR}'" >> "${TY_RESULTS_FILE}"
+echo "$BN: Running 'diff -ua $TY_EXPECTS_DIR $TY_RESULTS_DIR'"
+echo "$BN: Running 'diff -ua $TY_EXPECTS_DIR $TY_RESULTS_DIR'" >> "${TY_RESULTS_FILE}"
 echo "======================================================" >> "${TY_RESULTS_FILE}"
-diff -ua "${TY_EXPECTS_DIR}" "${TY_RESULTS_DIR}" >> "${TY_RESULTS_FILE}"
+diff -ua "$TY_EXPECTS_DIR" "$TY_RESULTS_DIR" >> "${TY_RESULTS_FILE}"
 if [ "$?" = "0" ]; then
 	echo "======================================================" >> "${TY_RESULTS_FILE}"
-	echo "${BN}: Appear to have PASSED test 2"
-	echo "${BN}: Appear to have PASSED test 2" >> "${TY_RESULTS_FILE}"
+	echo "$BN: Appear to have PASSED test 2"
+	echo "$BN: Appear to have PASSED test 2" >> "${TY_RESULTS_FILE}"
 else
 	echo "======================================================" >> "${TY_RESULTS_FILE}"
-	echo "${BN}: Appears test 2 FAILED!"
-	echo "${BN}: Appears test 2 FAILED!" >> "${TY_RESULTS_FILE}"
+	echo "$BN: Appears test 2 FAILED!"
+	echo "$BN: Appears test 2 FAILED!" >> "${TY_RESULTS_FILE}"
 fi
-echo "${BN}: See full results in ${TY_RESULTS_FILE}"
+echo "$BN: See full results in $TY_RESULTS_FILE"
 
 # Restore the original set name
-export TY_CASES_SETNAME="${original_set}"
+export TY_CASES_SETNAME="$original_set"
 
 # eof
+

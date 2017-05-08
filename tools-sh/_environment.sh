@@ -21,8 +21,8 @@ fi
 # Change these if necessary:
 #############################################################################
 
-# Absolute path of the top-level tidy-html5-tests directory.
-project_root_dir="$(readlink -e $(dirname $0)/..)"
+# Relative path from this script to the top-level tidy-html5-tests directory.
+project_root_dir=".."
 
 # These are all relative from the project_root_dir directory.
 cases_base_dir="cases"
@@ -72,7 +72,7 @@ set_environment()
     # cd "${cwd}"
     
     # *Only* set TY_CASES_SETNAME if it's not already set!
-    if [ -z "${TY_CASES_SETNAME}" ]; then
+    if [ -z "$TY_CASES_SETNAME" ]; then
         export TY_CASES_SETNAME="${cases_setname}"   
     fi
     
@@ -92,20 +92,20 @@ set_environment()
 
 report_environment()
 {
-    echo "TY_PROJECT_ROOT_DIR = ${TY_PROJECT_ROOT_DIR}"
-    echo "  TY_CASES_BASE_DIR = ${TY_CASES_BASE_DIR}"
-    echo "       TY_CASES_DIR = ${TY_CASES_DIR}"
-    echo "     TY_EXPECTS_DIR = ${TY_EXPECTS_DIR}"
-    echo "    TY_EXPECTS_FILE = ${TY_EXPECTS_FILE}"
-    echo "  TY_CONFIG_DEFAULT = ${TY_CONFIG_DEFAULT}"
-    echo "    TY_VERSION_FILE = ${TY_VERSION_FILE}"
-    echo "TY_RESULTS_BASE_DIR = ${TY_RESULTS_BASE_DIR}"
-    echo "     TY_RESULTS_DIR = ${TY_RESULTS_DIR}"
-    echo "    TY_RESULTS_FILE = ${TY_RESULTS_FILE}"
-    echo "         TY_TMP_DIR = ${TY_TMP_DIR}"
-    echo "        TY_TMP_FILE = ${TY_TMP_FILE}"
-    echo "       TY_TIDY_PATH = ${TY_TIDY_PATH}"
-    echo "   TY_CASES_SETNAME = ${TY_CASES_SETNAME}"
+    echo "TY_PROJECT_ROOT_DIR = $TY_PROJECT_ROOT_DIR"
+    echo "  TY_CASES_BASE_DIR = $TY_CASES_BASE_DIR"
+    echo "       TY_CASES_DIR = $TY_CASES_DIR"
+    echo "     TY_EXPECTS_DIR = $TY_EXPECTS_DIR"
+    echo "    TY_EXPECTS_FILE = $TY_EXPECTS_FILE"
+    echo "  TY_CONFIG_DEFAULT = $TY_CONFIG_DEFAULT"
+    echo "    TY_VERSION_FILE = $TY_VERSION_FILE"
+    echo "TY_RESULTS_BASE_DIR = $TY_RESULTS_BASE_DIR"
+    echo "     TY_RESULTS_DIR = $TY_RESULTS_DIR"
+    echo "    TY_RESULTS_FILE = $TY_RESULTS_FILE"
+    echo "         TY_TMP_DIR = $TY_TMP_DIR"
+    echo "        TY_TMP_FILE = $TY_TMP_FILE"
+    echo "       TY_TIDY_PATH = $TY_TIDY_PATH"
+    echo "   TY_CASES_SETNAME = $TY_CASES_SETNAME"
 }
 
 report_testbase_version()
@@ -119,10 +119,10 @@ report_tidy_version()
     local version=$(${TY_TIDY_PATH} -v)
     if [ ! "$?" = "0" ]; then
         echo ""
-        echo "${BN}: ${TY_TIDY_PATH}"
-        echo "${BN}: Tidy was unable to run '${TY_TIDY_PATH} -v' successfully."
+        echo "$BN: ${TY_TIDY_PATH}"
+        echo "$BN: Tidy was unable to run '${TY_TIDY_PATH} -v' successfully."
         echo ""
-        ERROR_COUNT=$((${ERROR_COUNT} + 1))
+        ERROR_COUNT=$(($ERROR_COUNT + 1))
         return 1
     fi    
     echo $version
@@ -137,10 +137,10 @@ test_case_file()
 {
     if [ ! -f "$1" ]; then
         echo ""
-        echo "${BN}: Case file: $1"
-        echo "${BN}: This case file was not found. Is the number correct?"
+        echo "$BN: Case file: $1"
+        echo "$BN: This case file was not found. Is the number correct?"
         echo ""
-        ERROR_COUNT=$((${ERROR_COUNT} + 1))
+        ERROR_COUNT=$(($ERROR_COUNT + 1))
         return 1
     fi
 }
@@ -149,10 +149,10 @@ test_case_config()
 {
     if [ ! -f "$1" ]; then
         echo ""
-        echo "${BN}: Config file: $1"
-        echo "${BN}: This configuration file was not found."
+        echo "$BN: Config file: $1"
+        echo "$BN: This configuration file was not found."
         echo ""
-        ERROR_COUNT=$((${ERROR_COUNT} + 1))
+        ERROR_COUNT=$(($ERROR_COUNT + 1))
         return 1
     fi
 }
@@ -162,9 +162,9 @@ test_file_general()
 {
     if [ ! -f "$1" ]; then
         echo ""
-        echo "${BN}: $1"
-        echo "${BN}: This file is needed but was not found."
-        ERROR_COUNT=$((${ERROR_COUNT} + 1))
+        echo "$BN: $1"
+        echo "$BN: This file is needed but was not found."
+        ERROR_COUNT=$(($ERROR_COUNT + 1))
         return 1
     fi
 }
@@ -174,10 +174,10 @@ test_file_expects()
 {
     if [ ! -f "$1" ]; then
         echo ""
-        echo "${BN}: Expects file: $1"
-        echo "${BN}: This file is needed for the compare, but this may not be a problem."
-        echo "${BN}: Maybe there is no 'expects' file for test $1!"
-        ERROR_COUNT=$((${ERROR_COUNT} + 1))
+        echo "$BN: Expects file: $1"
+        echo "$BN: This file is needed for the compare, but this may not be a problem."
+        echo "$BN: Maybe there is no 'expects' file for test $1!"
+        ERROR_COUNT=$(($ERROR_COUNT + 1))
         return 1
     fi
 }
@@ -187,11 +187,11 @@ test_file_output()
 {
     if [ ! -f "$1" ]; then
         echo ""
-        echo "${BN}: Tidy output: $1"
-        echo "${BN}: This file is needed for the compare. It is strange this it was not created."
-        echo "${BN}: *** NEEDS CHECKING ***"
+        echo "$BN: Tidy output: $1"
+        echo "$BN: This file is needed for the compare. It is strange this it was not created."
+        echo "$BN: *** NEEDS CHECKING ***"
         echo ""
-        ERROR_COUNT=$((${ERROR_COUNT} + 1))
+        ERROR_COUNT=$(($ERROR_COUNT + 1))
         return 1
     fi
 }
@@ -200,11 +200,11 @@ test_results_base_dir()
 {
     if [ ! -d "${TY_RESULTS_BASE_DIR}" ]; then
         echo ""
-        echo "${BN}: ${TY_RESULTS_BASE_DIR}"
-        echo "${BN}: This results directory was not found; it must be created yourself."
-        echo "${BN}: This script does NOT create this directory."
+        echo "$BN: ${TY_RESULTS_BASE_DIR}"
+        echo "$BN: This results directory was not found; it must be created yourself."
+        echo "$BN: This script does NOT create this directory."
         echo ""
-        ERROR_COUNT=$((${ERROR_COUNT} + 1))
+        ERROR_COUNT=$(($ERROR_COUNT + 1))
         return 1
     fi
 }
@@ -213,21 +213,21 @@ test_tidy_path()
 {
     if [ -z "${TY_TIDY_PATH+x}" ]; then
         echo ""
-        echo "${BN}: TY_TIDY_PATH is not set"
-        echo "${BN}: You must call this script with an argument pointing to an instance"
-        echo "${BN}: of HTML Tidy, or set the TY_TIDY_PATH environment variable to"
-        echo "${BN}: point to an instance of HTML Tidy."
+        echo "$BN: TY_TIDY_PATH is not set"
+        echo "$BN: You must call this script with an argument pointing to an instance"
+        echo "$BN: of HTML Tidy, or set the TY_TIDY_PATH environment variable to"
+        echo "$BN: point to an instance of HTML Tidy."
         echo ""
-        ERROR_COUNT=$((${ERROR_COUNT} + 1))
+        ERROR_COUNT=$(($ERROR_COUNT + 1))
         return 1
     fi
     
     if [ ! -x "${TY_TIDY_PATH}" ]; then
         echo ""
-        echo "${BN}: ${TY_TIDY_PATH}"
-        echo "${BN}: This instance of Tidy was not found. Is it on your path?"
+        echo "$BN: ${TY_TIDY_PATH}"
+        echo "$BN: This instance of Tidy was not found. Is it on your path?"
         echo ""
-        ERROR_COUNT=$((${ERROR_COUNT} + 1))
+        ERROR_COUNT=$(($ERROR_COUNT + 1))
         return 1
     fi
 }
@@ -241,3 +241,4 @@ test_tidy_path()
 BN="`basename $0`"
 ERROR_COUNT=0
 # eof
+

@@ -603,10 +603,13 @@ line 291 column 2 - Warning: <a> escaping malformed URI reference
 line 294 column 2 - Warning: <a> escaping malformed URI reference
 line 297 column 2 - Warning: <a> escaping malformed URI reference
 line 300 column 2 - Warning: <a> escaping malformed URI reference
+line 689 column 2 - Warning: <a> illegal characters found in URI
 line 695 column 2 - Warning: <a> escaping malformed URI reference
+line 695 column 2 - Warning: <a> illegal characters found in URI
 line 698 column 2 - Warning: <a> escaping malformed URI reference
+line 698 column 2 - Warning: <a> illegal characters found in URI
 Info: Document content looks like HTML5
-Tidy found 607 warnings and 0 errors!
+Tidy found 610 warnings and 0 errors!
 
 URIs must be properly escaped, they must not contain unescaped
 characters below U+0021 including the space character and not

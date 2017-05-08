@@ -3,11 +3,12 @@ line 152 column 1 - Warning: <form> shouldn't be nested
 line 152 column 1 - Warning: missing </form>
 line 12 column 1 - Warning: missing </form>
 line 12 column 1 - Warning: <form> escaping malformed URI reference
+line 12 column 1 - Warning: <form> illegal characters found in URI
 line 42 column 1 - Warning: trimming empty <p>
 line 138 column 1 - Warning: trimming empty <p>
 line 143 column 1 - Warning: trimming empty <p>
 Info: Document content looks like HTML5
-Tidy found 8 warnings and 0 errors!
+Tidy found 9 warnings and 0 errors!
 
 URIs must be properly escaped, they must not contain unescaped
 characters below U+0021 including the space character and not

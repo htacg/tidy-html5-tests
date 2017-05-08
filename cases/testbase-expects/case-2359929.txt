@@ -1,8 +1,9 @@
 line 8 column 7 - Warning: <a> URI reference contains backslash. Typo?
+line 8 column 7 - Warning: <a> illegal characters found in URI
 Info: Doctype given is "-//W3C//DTD HTML 4.01 Transitional//EN"
 Info: Document content looks like HTML 4.01 Transitional
 Info: No system identifier in emitted doctype
-Tidy found 1 warning and 0 errors!
+Tidy found 2 warnings and 0 errors!
 
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues
