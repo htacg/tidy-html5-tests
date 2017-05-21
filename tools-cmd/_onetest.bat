@@ -69,9 +69,9 @@ REM ------------------------------------------------
 @REM ------------------------------------------------
 @REM  Begin tidying and testing
 @REM ------------------------------------------------
-@echo Doing: %TY_TIDY_PATH% -lang en_us -f %MSGFILE% -config %CFGFILE% %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o %TIDYFILE% %INFILE% >> "%TY_RESULTS_FILE%"
+@echo Doing: %TY_TIDY_PATH% -lang en_us -f %MSGFILE% -config %CFGFILE% %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o %TIDYFILE% %TIDY_EXTRA_OPTS% %INFILE% >> "%TY_RESULTS_FILE%"
 
-@"%TY_TIDY_PATH%" -lang en_us -f "%MSGFILE%" -config "%CFGFILE%" %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o "%TIDYFILE%" "%INFILE%"
+@"%TY_TIDY_PATH%" -lang en_us -f "%MSGFILE%" -config "%CFGFILE%" %3 %4 %5 %6 %7 %8 %9 --tidy-mark no -o "%TIDYFILE%" %TIDY_EXTRA_OPTS% "%INFILE%"
 @set STATUS=%ERRORLEVEL%
 @echo Testing %1, expect %EXPECTED%, got %STATUS%
 @echo Testing %1, expect %EXPECTED%, got %STATUS% >> "%TY_RESULTS_FILE%"
