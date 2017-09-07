@@ -74,7 +74,7 @@ if [ ! -d "${TY_RESULTS_DIR}" ]; then
 fi
 
 # Perform the testing
-${TY_TIDY_PATH} -f $MSGFILE --accessibility-check $ACCESSLEVEL -config $CFGFILE "$@" --gnu-emacs no --tidy-mark no -o $TIDYFILE $INFILE
+${TY_TIDY_PATH} -f $MSGFILE --accessibility-check $ACCESSLEVEL --show-info no -config $CFGFILE "$@" --gnu-emacs no --tidy-mark no -o $TIDYFILE $INFILE
 STATUS=$?
 
 if [ `grep -c -e ' \['$TESTEXPECTED'\]: ' $MSGFILE` = 0 ]
