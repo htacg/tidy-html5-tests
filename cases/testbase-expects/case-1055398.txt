@@ -1,3 +1,7 @@
+line 8 column 1 - Info: value for attribute "onload" missing quote marks
+line 8 column 1 - Info: value for attribute "style" missing quote marks
+line 8 column 1 - Info: value for attribute "style" missing quote marks
+line 8 column 1 - Info: value for attribute "onload" missing quote marks
 line 8 column 1 - Warning: <font> dropping value "L1" for repeated attribute "onload"
 line 8 column 1 - Warning: <font> joining values of repeated attribute "style"
 line 8 column 1 - Warning: missing </font> before </body>

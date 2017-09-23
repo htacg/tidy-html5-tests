@@ -1,4 +1,22 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
+line 6 column 1 - Info: value for attribute "http-equiv" missing quote marks
+line 7 column 1 - Info: value for attribute "name" missing quote marks
+line 7 column 1 - Info: value for attribute "content" missing quote marks
+line 8 column 1 - Info: value for attribute "name" missing quote marks
+line 9 column 1 - Info: value for attribute "name" missing quote marks
+line 10 column 1 - Info: value for attribute "rel" missing quote marks
+line 154 column 1 - Info: value for attribute "lang" missing quote marks
+line 156 column 1 - Info: value for attribute "class" missing quote marks
+line 160 column 1 - Info: value for attribute "class" missing quote marks
+line 162 column 1 - Info: value for attribute "class" missing quote marks
+line 170 column 1 - Info: value for attribute "class" missing quote marks
+line 172 column 1 - Info: value for attribute "class" missing quote marks
+line 177 column 1 - Info: value for attribute "class" missing quote marks
+line 181 column 1 - Info: value for attribute "class" missing quote marks
+line 185 column 1 - Info: value for attribute "class" missing quote marks
+line 189 column 1 - Info: value for attribute "class" missing quote marks
+line 191 column 1 - Info: value for attribute "class" missing quote marks
+line 204 column 1 - Info: value for attribute "class" missing quote marks
 line 1 column 1 - Warning: <html> proprietary attribute "xmlns:o"
 line 1 column 1 - Warning: <html> proprietary attribute "xmlns:w"
 line 160 column 121 - Warning: <o:p> is not approved by W3C

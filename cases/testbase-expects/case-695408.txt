@@ -1,4 +1,7 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
+line 8 column 11 - Info: value for attribute "datafld" missing quote marks
+line 9 column 11 - Info: value for attribute "datafld" missing quote marks
+line 10 column 11 - Info: value for attribute "datafld" missing quote marks
 line 8 column 11 - Warning: <span> proprietary attribute "datafld"
 line 9 column 11 - Warning: <span> proprietary attribute "datafld"
 line 10 column 11 - Warning: <span> proprietary attribute "datafld"

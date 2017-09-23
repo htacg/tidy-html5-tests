@@ -1,3 +1,9 @@
+line 6 column 1 - Info: value for attribute "http-equiv" missing quote marks
+line 7 column 1 - Info: value for attribute "name" missing quote marks
+line 7 column 1 - Info: value for attribute "content" missing quote marks
+line 8 column 1 - Info: value for attribute "name" missing quote marks
+line 9 column 1 - Info: value for attribute "name" missing quote marks
+line 13 column 1 - Info: value for attribute "lang" missing quote marks
 Info: Document content looks like XHTML5
 Tidy found 3 warnings and 0 errors! Not all warnings/errors were shown.
 

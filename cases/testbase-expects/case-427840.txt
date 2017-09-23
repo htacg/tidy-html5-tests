@@ -1,5 +1,6 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
 line 4 column 1 - Warning: <span> missing '>' for end of tag
+line 4 column 1 - Info: value for attribute "class" missing quote marks
 line 4 column 1 - Warning: missing </span> before <p>
 line 5 column 4 - Warning: inserting implicit <span>
 line 6 column 1 - Warning: discarding unexpected </span>

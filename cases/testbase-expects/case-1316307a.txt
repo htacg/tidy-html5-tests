@@ -1,3 +1,7 @@
+line 9 column 1 - Info: value for attribute "cellspacing" missing quote marks
+line 9 column 1 - Info: value for attribute "border" missing quote marks
+line 9 column 1 - Info: value for attribute "cellpadding" missing quote marks
+line 9 column 1 - Info: value for attribute "width" missing quote marks
 line 13 column 1 - Warning: <center> isn't allowed in <tr> elements
 line 10 column 9 - Info: <tr> previously mentioned
 line 13 column 1 - Warning: missing </center> before <td>

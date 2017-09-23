@@ -1,3 +1,9 @@
+line 7 column 1 - Info: value for attribute "http-equiv" missing quote marks
+line 8 column 1 - Info: value for attribute "name" missing quote marks
+line 8 column 1 - Info: value for attribute "content" missing quote marks
+line 9 column 1 - Info: value for attribute "name" missing quote marks
+line 10 column 1 - Info: value for attribute "name" missing quote marks
+line 11 column 1 - Info: value for attribute "rel" missing quote marks
 line 13 column 1 - Error: unexpected </head> in <link>
 Tidy found 0 warnings and 1 error!
 
