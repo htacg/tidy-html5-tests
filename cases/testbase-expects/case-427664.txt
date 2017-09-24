@@ -1,11 +1,10 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
 line 5 column 1 - Warning: <body> attribute name "Ã1/2" (value="xx") is invalid
-line 5 column 1 - Warning: <body> unexpected or duplicate quote mark
-line 5 column 1 - Warning: <body> unexpected or duplicate quote mark
+line 5 column 1 - Info: value for attribute "width" missing quote marks
 line 5 column 1 - Warning: <body> attribute "width" has invalid value "align="""
 line 5 column 1 - Warning: <body> proprietary attribute "width"
 Info: Document content looks like HTML5
-Tidy found 6 warnings and 0 errors!
+Tidy found 4 warnings and 0 errors!
 
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues

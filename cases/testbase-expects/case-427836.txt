@@ -1,3 +1,5 @@
+line 2 column 1 - Info: value for attribute "width" missing quote marks
+line 2 column 1 - Info: value for attribute "height" missing quote marks
 line 2 column 1 - Warning: missing <!DOCTYPE> declaration
 line 2 column 1 - Warning: inserting implicit <body>
 line 3 column 17 - Warning: <img> discarding newline in URI reference

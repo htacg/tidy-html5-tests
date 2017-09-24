@@ -4,6 +4,7 @@ line 14 column 21 - Warning: inserting implicit <strong>
 line 18 column 1 - Warning: inserting implicit <strong>
 line 18 column 1 - Warning: missing </strong> before <center>
 line 20 column 9 - Warning: inserting implicit <strong>
+line 20 column 9 - Info: value for attribute "border" missing quote marks
 line 20 column 9 - Warning: missing </strong> before <h1>
 line 22 column 5 - Warning: inserting implicit <strong>
 line 25 column 96 - Warning: unescaped & or unknown entity "&body"
@@ -38,17 +39,44 @@ line 328 column 1 - Warning: missing </a>
 line 328 column 70 - Warning: discarding unexpected </a>
 line 339 column 1 - Warning: <center> isn't allowed in <h3> elements
 line 332 column 1 - Info: <h3> previously mentioned
+line 339 column 9 - Info: value for attribute "width" missing quote marks
+line 339 column 9 - Info: value for attribute "height" missing quote marks
+line 339 column 9 - Info: value for attribute "border" missing quote marks
 line 339 column 68 - Warning: discarding unexpected </center>
+line 341 column 1 - Info: value for attribute "width" missing quote marks
+line 341 column 1 - Info: value for attribute "height" missing quote marks
+line 341 column 1 - Info: value for attribute "border" missing quote marks
+line 341 column 1 - Info: value for attribute "hspace" missing quote marks
+line 345 column 1 - Info: value for attribute "width" missing quote marks
+line 345 column 1 - Info: value for attribute "height" missing quote marks
+line 345 column 1 - Info: value for attribute "border" missing quote marks
+line 345 column 1 - Info: value for attribute "hspace" missing quote marks
 line 353 column 1 - Warning: <center> isn't allowed in <h3> elements
 line 339 column 1 - Info: <h3> previously mentioned
 line 353 column 1 - Warning: missing </h3> before <h1>
 line 353 column 92 - Warning: discarding unexpected </center>
 line 363 column 268 - Warning: discarding unexpected </h3>
+line 367 column 9 - Info: value for attribute "border" missing quote marks
+line 371 column 79 - Info: value for attribute "width" missing quote marks
+line 371 column 79 - Info: value for attribute "height" missing quote marks
+line 371 column 79 - Info: value for attribute "border" missing quote marks
 line 383 column 5 - Warning: missing </a>
 line 383 column 57 - Warning: discarding unexpected </strong>
 line 383 column 66 - Warning: discarding unexpected </a>
+line 387 column 1 - Info: value for attribute "method" missing quote marks
+line 388 column 1 - Info: value for attribute "cellspacing" missing quote marks
+line 388 column 1 - Info: value for attribute "cellpadding" missing quote marks
+line 388 column 1 - Info: value for attribute "border" missing quote marks
+line 388 column 1 - Info: value for attribute "bgcolor" missing quote marks
+line 390 column 5 - Info: value for attribute "colspan" missing quote marks
+line 390 column 5 - Info: value for attribute "align" missing quote marks
+line 396 column 7 - Info: value for attribute "type" missing quote marks
+line 396 column 7 - Info: value for attribute "size" missing quote marks
+line 399 column 7 - Info: value for attribute "type" missing quote marks
+line 399 column 7 - Info: value for attribute "border" missing quote marks
 line 414 column 76 - Warning: unescaped & or unknown entity "&font"
 line 414 column 92 - Warning: unescaped & or unknown entity "&base"
+line 414 column 1 - Info: value for attribute "border" missing quote marks
 line 424 column 1 - Warning: discarding unexpected </strong>
 line 25 column 29 - Warning: <a> escaping malformed URI reference
 line 25 column 29 - Warning: <a> illegal characters found in URI

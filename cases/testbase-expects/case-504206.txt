@@ -1,4 +1,17 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
+line 16 column 1 - Info: value for attribute "type" missing quote marks
+line 18 column 1 - Info: value for attribute "type" missing quote marks
+line 20 column 1 - Info: value for attribute "type" missing quote marks
+line 25 column 1 - Info: value for attribute "type" missing quote marks
+line 26 column 1 - Info: value for attribute "type" missing quote marks
+line 29 column 38 - Info: value for attribute "type" missing quote marks
+line 31 column 48 - Info: value for attribute "type" missing quote marks
+line 136 column 1 - Info: value for attribute "rows" missing quote marks
+line 136 column 1 - Info: value for attribute "cols" missing quote marks
+line 141 column 1 - Info: value for attribute "rows" missing quote marks
+line 141 column 1 - Info: value for attribute "cols" missing quote marks
+line 148 column 1 - Info: value for attribute "rows" missing quote marks
+line 148 column 1 - Info: value for attribute "cols" missing quote marks
 line 152 column 1 - Warning: <form> shouldn't be nested
 line 152 column 1 - Warning: missing </form>
 line 12 column 1 - Warning: missing </form>
