@@ -1,4 +1,4 @@
-line 3 column 1 - Warning: inserting missing 'title' element
+line 24 column 1 - Warning: dropping a possible comment due to a missing hyphen
 Info: Document content looks like HTML5
 Tidy found 1 warning and 0 errors!
 
