@@ -11,6 +11,11 @@ Tidy found 5 warnings and 1 error!
 This document has errors that must be fixed before
 using HTML Tidy to generate a tidied up version.
 
+One or more empty elements were present in the source document but
+dropped on output. If these elements are necessary or you don't want
+this behavior, then consider setting the option "drop-empty-elements"
+to no.
+
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues
 Official mailing list: https://lists.w3.org/Archives/Public/public-htacg/

@@ -17,6 +17,11 @@ properties such as its size and color. This will reduce
 the size of HTML files and make them easier to maintain
 compared with using <FONT> elements.
 
+One or more empty elements were present in the source document but
+dropped on output. If these elements are necessary or you don't want
+this behavior, then consider setting the option "drop-empty-elements"
+to no.
+
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues
 Official mailing list: https://lists.w3.org/Archives/Public/public-htacg/

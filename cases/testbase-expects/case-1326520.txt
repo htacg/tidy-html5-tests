@@ -9,6 +9,11 @@ line 4 column 3 - Warning: <noframes> element removed from HTML5
 Info: Document content looks like HTML5
 Tidy found 7 warnings and 0 errors!
 
+One or more empty elements were present in the source document but
+dropped on output. If these elements are necessary or you don't want
+this behavior, then consider setting the option "drop-empty-elements"
+to no.
+
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues
 Official mailing list: https://lists.w3.org/Archives/Public/public-htacg/

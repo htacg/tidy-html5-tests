@@ -17,6 +17,11 @@ a meaningful context for each cell.
 
 For further advice on how to make your pages accessible
 see http://www.w3.org/WAI/GL.
+One or more empty elements were present in the source document but
+dropped on output. If these elements are necessary or you don't want
+this behavior, then consider setting the option "drop-empty-elements"
+to no.
+
 About HTML Tidy: https://github.com/htacg/tidy-html5
 Bug reports and comments: https://github.com/htacg/tidy-html5/issues
 Official mailing list: https://lists.w3.org/Archives/Public/public-htacg/
