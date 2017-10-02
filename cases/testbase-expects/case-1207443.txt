@@ -1,3 +1,6 @@
+line 17 column 1 - Info: missing optional end tag </li>
+line 22 column 1 - Info: missing optional end tag </li>
+line 27 column 1 - Info: missing optional end tag </li>
 Info: Doctype given is "-//W3C//DTD HTML 4.01 Transitional//EN"
 Info: Document content looks like XHTML 1.0 Transitional
 No warnings or errors were found.

@@ -1,5 +1,15 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
+line 6 column 319 - Info: missing optional end tag </li>
 line 6 column 378 - Warning: inserting implicit <ul>
+line 6 column 378 - Info: missing optional end tag </li>
+line 6 column 412 - Info: missing optional end tag </li>
+line 6 column 456 - Info: missing optional end tag </li>
+line 6 column 519 - Info: missing optional end tag </li>
+line 6 column 574 - Info: missing optional end tag </li>
+line 6 column 665 - Info: missing optional end tag </li>
+line 6 column 690 - Info: missing optional end tag </li>
+line 6 column 754 - Info: missing optional end tag </li>
+line 6 column 842 - Info: missing optional end tag </li>
 line 6 column 378 - Warning: missing </ul> before </li>
 line 6 column 1046 - Warning: discarding unexpected </li>
 line 6 column 1051 - Warning: discarding unexpected </li>

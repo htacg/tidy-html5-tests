@@ -1,4 +1,8 @@
 line 1 column 1 - Warning: missing <!DOCTYPE> declaration
+line 12 column 1 - Info: missing optional end tag </li>
+line 13 column 1 - Info: missing optional end tag </li>
+line 25 column 1 - Info: missing optional end tag </li>
+line 26 column 1 - Info: missing optional end tag </li>
 line 30 column 1 - Warning: discarding unexpected </body>
 line 31 column 1 - Warning: discarding unexpected </html>
 line 22 column 1 - Warning: missing </ul>
