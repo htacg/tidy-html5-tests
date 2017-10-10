@@ -1,6 +1,6 @@
-Config: option "squelch" given bad argument "FAKE_TAG" (STRING_ARGUMENT_BAD)
-Config: messages of type "MISSING_ENDTAG_OPTIONAL" will not be output (STRING_SQUELCHING_TYPE)
-Config: messages of type "MISSING_ENDTAG_FOR" will not be output (STRING_SQUELCHING_TYPE)
+Config: option "mute" given bad argument "FAKE_TAG" (STRING_ARGUMENT_BAD)
+Config: messages of type "MISSING_ENDTAG_OPTIONAL" will not be output (STRING_MUTING_TYPE)
+Config: messages of type "MISSING_ENDTAG_FOR" will not be output (STRING_MUTING_TYPE)
 line 18 column 1 - Warning: <p> proprietary attribute "download" (PROPRIETARY_ATTRIBUTE)
 Info: Document content looks like HTML5 (STRING_CONTENT_LOOKS)
 Tidy found 2 warnings and 0 errors!
