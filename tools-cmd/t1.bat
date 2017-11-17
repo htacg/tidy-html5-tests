@@ -64,6 +64,8 @@
 @REM ------------------------------------------------
 @echo Test 1 case %DATE% %TIME%
 @echo Test 1 case %DATE% %TIME% > "%TY_RESULTS_FILE%"
+@echo Version of %TY_TIDY_PATH% -
+@echo Version of %TY_TIDY_PATH% - >> "%TY_RESULTS_FILE%"
 @"%TY_TIDY_PATH%" -v >> "%TY_RESULTS_FILE%"
 @"%TY_TIDY_PATH%" -v
 @echo.
@@ -91,14 +93,14 @@
 @REM ------------------------------------------------
 @REM  Compare the outputs, exactly
 @REM ------------------------------------------------
-@set TMPOPTS=-ua
+@set TMPOPTS=-u
 @set ERRCNT=0
 
 @echo.
-@echo Doing: 'diff %TMPOPTS% ...%TMPFIL1:~-35% ...%TMPFIL2:~-35%'
+@echo Doing: 'diff %TMPOPTS% %TMPFIL1% %TMPFIL2%'
 @diff %TMPOPTS% "%TMPFIL1%" "%TMPFIL2%"
 @if ERRORLEVEL 1 goto GOTD1
-@echo Files appear exactly the same...
+@echo Output HTML files appear **exactly** the same...
 @goto DODIF2
 
 
@@ -113,10 +115,10 @@
 
 :DODIF2
 @echo.
-@echo Doing: 'diff %TMPOPTS% ...%TMPOUT1:~-35% ...%TMPOUT2:~-35%'
+@echo Doing: 'diff %TMPOPTS% %TMPOUT1% %TMPOUT2%'
 @diff %TMPOPTS% %TMPOUT1% %TMPOUT2%
 @if ERRORLEVEL 1 goto GOTD2
-@echo Files appear exactly the same...
+@echo Output text files appear **exactly** the same...
 @goto DODIF3
 
 
