@@ -36,12 +36,16 @@
 @set TMPCNT=0
 @for /F "tokens=1*" %%i in (%TY_EXPECTS_FILE%) do set /A TMPCNT+=1
 @for /F "delims=" %%i IN ('"%TY_TIDY_PATH%" -v') DO set version=%%i
+@if "%TY_VERSION_FILE%x" == "x" goto NOVERS
+@if NOT EXIST %TY_VERSION_FILE% goto NOVERS
+@set /p TY_VERSION=<%TY_VERSION_FILE%
 
 @echo ==================================================== > "%TY_RESULTS_FILE%"
 @echo  Testing setname: %TY_CASES_SETNAME% >>                "%TY_RESULTS_FILE%"
 @echo             Date: %DATE% %TIME% >>                     "%TY_RESULTS_FILE%"
 @echo         Tidy EXE: %TY_TIDY_PATH% >>                    "%TY_RESULTS_FILE%"
 @echo     Tidy Version: %version% >>                         "%TY_RESULTS_FILE%"
+@echo     Test Version: %TY_VERSION% from %TY_VERSION_FILE% >> "%TY_RESULTS_FILE%"
 @echo   Input Manifest: %TY_EXPECTS_FILE% >>                 "%TY_RESULTS_FILE%"
 @echo    Output folder: %TY_RESULTS_DIR%\ >>                 "%TY_RESULTS_FILE%"
 @echo Tests to Perform: %TMPCNT% >>                          "%TY_RESULTS_FILE%"
@@ -78,7 +82,7 @@ echo.
 @echo ==================================================== >> "%TY_RESULTS_FILE%"
 @echo.
 @echo See %TY_RESULTS_FILE% file for list of tests done.
-@REM if /i "%TY_CASES_SETNAME%" == "access" goto END
+@if /i "%TY_CASES_SETNAME%" == "access" goto END
 @echo.
 @diff -v > NUL
 @if ERRORLEVEL 1 goto NODIFF
@@ -86,9 +90,7 @@ echo.
 @echo Doing: 'diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR%' >> "%TY_RESULTS_FILE%"
 @diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR% >> "%TY_RESULTS_FILE%"
 @if ERRORLEVEL 1 goto DNDIFF
-@echo.
-@echo Appears a successful compare of folders... no output changes detected...
-@echo.
+@echo Appears a successful compare of folders...
 @goto END
 
 :NODIFF
@@ -99,9 +101,9 @@ echo.
 @echo     - 'diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR%'
 @echo.
 @echo   Or use any other folder compare utility you have
-:DNDIFF
 @echo.
-@echo   Check the differences carefully:
+:DNDIFF
+@echo   Check any differences carefully:
 @echo     - if acceptable update '%TY_EXPECTS_DIR%' accordingly.
 @echo.
 @goto END
@@ -143,6 +145,10 @@ echo.
   @echo  Any directory compare utility will do, or you can download, and use
   @echo  a WIN32 port of GNU diff.exe from http://unxutils.sourceforge.net/
   @echo.
+@goto END
+
+:NOVERS
+@echo A problem. Can NOT locate '%TY_VERSION_FILE%' file! *** FIX ME ***
 @goto END
 
 :END
