@@ -90,7 +90,10 @@ echo.
 @echo Doing: 'diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR%' >> "%TY_RESULTS_FILE%"
 @diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR% >> "%TY_RESULTS_FILE%"
 @if ERRORLEVEL 1 goto DNDIFF
-@echo Appears a successful compare of folders...
+@echo.
+@echo SUCCESS: Appears a successful compare of folders...
+@echo SUCCESS: Appears a successful compare of folders... >> "%TY_RESULTS_FILE%"
+@echo.
 @goto END
 
 :NODIFF
@@ -101,9 +104,9 @@ echo.
 @echo     - 'diff -u %TY_EXPECTS_DIR% %TY_RESULTS_DIR%'
 @echo.
 @echo   Or use any other folder compare utility you have
-@echo.
 :DNDIFF
-@echo   Check any differences carefully:
+@echo.
+@echo   FAILED: Check any differences carefully:
 @echo     - if acceptable update '%TY_EXPECTS_DIR%' accordingly.
 @echo.
 @goto END
