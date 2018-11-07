@@ -29,6 +29,16 @@ if [ ! -d "$TY_EXPECTS_DIR" ]; then
 	exit 1
 fi
 
+if [ -d "$TY_RESULTS_DIR" ]; then
+	echo "$BN: Removing existing dir, and re-create $TY_RESULTS_DIR"
+	rm -rf "$TY_RESULTS_DIR"
+	mkdir "$TY_RESULTS_DIR"
+	if [ ! "$?" = "0" ]; then
+	    echo "$BN: Unable to recreate $TY_RESULTS_DIR!"
+    	exit 1
+    fi
+fi
+
 ./$TMPSCR $TMPTIDY
 
 if [ ! -d "$TY_RESULTS_DIR" ]; then
@@ -41,13 +51,17 @@ echo "$BN: Running 'diff -ua $TY_EXPECTS_DIR $TY_RESULTS_DIR'" >> "${TY_RESULTS_
 echo "======================================================" >> "${TY_RESULTS_FILE}"
 diff -ua "$TY_EXPECTS_DIR" "$TY_RESULTS_DIR" >> "${TY_RESULTS_FILE}"
 if [ "$?" = "0" ]; then
+    echo ""
 	echo "======================================================" >> "${TY_RESULTS_FILE}"
 	echo "$BN: Appear to have PASSED test 2"
 	echo "$BN: Appear to have PASSED test 2" >> "${TY_RESULTS_FILE}"
+    echo ""
 else
+    echo ""
 	echo "======================================================" >> "${TY_RESULTS_FILE}"
 	echo "$BN: Appears test 2 FAILED!"
 	echo "$BN: Appears test 2 FAILED!" >> "${TY_RESULTS_FILE}"
+    echo ""
 fi
 echo "$BN: See full results in $TY_RESULTS_FILE"
 
