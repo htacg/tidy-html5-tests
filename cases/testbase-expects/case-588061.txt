@@ -82,32 +82,46 @@ line 25 column 29 - Warning: <a> escaping malformed URI reference
 line 25 column 29 - Warning: <a> illegal characters found in URI
 line 74 column 210 - Warning: <a> escaping malformed URI reference
 line 74 column 210 - Warning: <a> illegal characters found in URI
+line 102 column 103 - Warning: <a> anchor "MAP details" already defined
 line 102 column 190 - Warning: <a> escaping malformed URI reference
 line 102 column 190 - Warning: <a> illegal characters found in URI
+line 106 column 101 - Warning: <a> anchor "MAP details" already defined
 line 106 column 188 - Warning: <a> escaping malformed URI reference
 line 106 column 188 - Warning: <a> illegal characters found in URI
+line 110 column 99 - Warning: <a> anchor "MAP details" already defined
 line 110 column 186 - Warning: <a> escaping malformed URI reference
 line 110 column 186 - Warning: <a> illegal characters found in URI
+line 114 column 97 - Warning: <a> anchor "MAP details" already defined
 line 114 column 184 - Warning: <a> escaping malformed URI reference
 line 114 column 184 - Warning: <a> illegal characters found in URI
+line 118 column 95 - Warning: <a> anchor "MAP details" already defined
 line 118 column 182 - Warning: <a> escaping malformed URI reference
 line 118 column 182 - Warning: <a> illegal characters found in URI
+line 122 column 89 - Warning: <a> anchor "MAP details" already defined
 line 122 column 176 - Warning: <a> escaping malformed URI reference
 line 122 column 176 - Warning: <a> illegal characters found in URI
+line 126 column 87 - Warning: <a> anchor "MAP details" already defined
 line 126 column 174 - Warning: <a> escaping malformed URI reference
 line 126 column 174 - Warning: <a> illegal characters found in URI
+line 130 column 89 - Warning: <a> anchor "MAP details" already defined
 line 130 column 176 - Warning: <a> escaping malformed URI reference
 line 130 column 176 - Warning: <a> illegal characters found in URI
+line 134 column 89 - Warning: <a> anchor "MAP details" already defined
 line 134 column 177 - Warning: <a> escaping malformed URI reference
 line 134 column 177 - Warning: <a> illegal characters found in URI
+line 138 column 90 - Warning: <a> anchor "MAP details" already defined
 line 138 column 178 - Warning: <a> escaping malformed URI reference
 line 138 column 178 - Warning: <a> illegal characters found in URI
+line 142 column 90 - Warning: <a> anchor "MAP details" already defined
 line 142 column 178 - Warning: <a> escaping malformed URI reference
 line 142 column 178 - Warning: <a> illegal characters found in URI
+line 168 column 131 - Warning: <a> anchor "MAP details" already defined
 line 168 column 218 - Warning: <a> escaping malformed URI reference
 line 168 column 218 - Warning: <a> illegal characters found in URI
+line 200 column 176 - Warning: <a> anchor "MAP details" already defined
 line 200 column 263 - Warning: <a> escaping malformed URI reference
 line 200 column 263 - Warning: <a> illegal characters found in URI
+line 248 column 94 - Warning: <a> anchor "MAP details" already defined
 line 248 column 223 - Warning: <a> escaping malformed URI reference
 line 248 column 223 - Warning: <a> illegal characters found in URI
 line 339 column 9 - Warning: <img> lacks "alt" attribute
@@ -145,7 +159,7 @@ line 403 column 3 - Warning: <tr> attribute "align" not allowed for HTML5
 line 383 column 5 - Warning: <a> proprietary attribute "alt"
 line 399 column 7 - Warning: <input> proprietary attribute "border"
 Info: Document content looks like HTML5
-Tidy found 116 warnings and 0 errors!
+Tidy found 130 warnings and 0 errors!
 
 URIs must be properly escaped, they must not contain unescaped
 characters below U+0021 including the space character and not
