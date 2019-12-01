@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>test</title>
+  <meta charset="utf-8">
+  <title>add 'slot' tag</title>
 </head>
 <body>
   <p><slot name="my-text">My default text</slot></p>
+
   <my-paragraph>
     <span slot="my-text">Let's have some different text!</span>
   </my-paragraph>
