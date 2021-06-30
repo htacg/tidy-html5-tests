@@ -1,3 +1,12 @@
+**ARCHIVED**
+============
+
+Note, this repository has been archived, and is no longer used by the HTML Tidy project.
+Regression testing has been once again merged back _into_ the main repository. The
+remainder of this document and repository have been left intact in the interest of
+discovery by future alien robotic explorers.
+
+
 Tidy Regression Testing Specification
 =====================================
 
